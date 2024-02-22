@@ -1,0 +1,86 @@
+const mongoose = require('mongoose');
+
+const vendorOrderSchema = mongoose.Schema({
+	_id			              : mongoose.Schema.Types.ObjectId,
+    orderID                   : Number,
+    order_ID                  : { type: mongoose.Schema.Types.ObjectId, ref: 'orders' },
+    vendorOrderID             : String,
+    user_ID                   : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    vendorID                  : Number,
+    vendor_ID                 : { type: mongoose.Schema.Types.ObjectId, ref: 'entitymasters' },
+    emailID                   : String,
+    userFullName              : String,
+    userName                  : String,
+    status                    : String,
+    RESPOSE_CODE              : String,
+    RESPOSE_MESSAGE           : String,
+    REFERENCE_NO              : String,
+    products                  : [
+        {
+            "product_ID"        : { type: mongoose.Schema.Types.ObjectId, ref: 'products' },
+            "productName"       : String,
+            "productNameRlang"  : String,
+            "discountPercent"   : Number,
+            "discountedPrice"   : Number,
+            "originalPrice"     : Number,
+            "color"             : String,
+            "size"              : String,
+            "unit"              : String,
+            "currency"          : String,
+            "quantity"          : Number,
+            "subTotal"          : Number,
+            "SGST"              : Number,
+            "CGST"              : Number,
+            "SGSTAmt"           : Number,
+            "CGSTAmt"           : Number,
+            "saving"            : Number,
+            "productImage"      : Array,
+            "section_ID"        : { type: mongoose.Schema.Types.ObjectId, ref: 'section' },
+            "section"           : String,
+            "category_ID"       : { type: mongoose.Schema.Types.ObjectId, ref: 'category' },
+            "vendor_ID"         : { type: mongoose.Schema.Types.ObjectId, ref: 'entitymasters' },
+            "category"          : String,
+            "subCategory_ID"    : String,
+            "subCategory"       : String,
+            "status"            : String,
+            "returnedDate"      : Date,
+            "deliveryStatus"    : [{
+                                    "status"          : String,
+                                    "expDeliveryDate" : Date,
+                                    "date"            : Date,
+                                    "userid"          : String
+                                }]
+        }
+    ],
+    returnedProduct           : Array,
+    paymentMethod             : String,
+    shippingtime              : String,
+    productLength             : Number,
+    deliveryAddress           : {
+                                    "name"            : String,
+                                    "email"           : String,
+                                    "addressLine1"    : String,
+                                    "addressLine2"    : String,
+                                    "pincode"         : String,
+                                    "city"            : String,
+                                    "district"        : String,
+                                    "stateCode"       : String,
+                                    "state"           : String,
+                                    "mobileNumber"    : String,
+                                    "countryCode"     : String,
+                                    "country"         : String,
+                                    "addType"         : String,
+                                    "latitude"        : Number,
+                                    "longitude"       : Number,
+                                },
+    deliveryStatus            : [{
+                                    "status"          : String,
+                                    "expDeliveryDate" : Date,
+                                    "date"            : Date,
+                                    "userid"          : String
+                                }],
+    createdBy                 : String,
+    createdAt                 : Date
+});
+
+module.exports = mongoose.model('vendororders',vendorOrderSchema);

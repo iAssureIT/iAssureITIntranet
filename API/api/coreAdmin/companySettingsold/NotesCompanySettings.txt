@@ -1,0 +1,212 @@
+Status : 
+		YTS 	: Yet to Start, 
+		WIP 	: Can be used with limitations
+		TIP		: Testing in process
+		Done	: Tested and can be used
+
+API : 
+
+1. Insert Company Details 				- Done
+2. Fetch Company Details				- Done
+3. Update Company Details				- Done
+4. Delete Company Details				- Done
+5. List All the documents				- Done
+6. Delete all Companys 					- Done
+
+=====================================================================================
+1. Insert Company Details
+=====================================================================================
+
+Method  : POST
+
+URL 	: '/api/companysettings/post'
+
+Input	: 
+			{
+			    "companyName"            : String,
+                "companyContactNumber"   : String,
+                "companyMobileNumber"    : String,
+                "companyEmail"           : String,
+                "companyAltEmail"        : String,
+                "logoFilename"           : String,
+                "companyUniqueID"        : String,
+                "companyLogo"            : String,
+                "companyLocationsInfo"   : [
+                                            {
+                                                "Location"        : String,
+                                                "companyAddress"  : String,
+                                                "companyPincode"  : String,
+                                                "companyCity"     : String,
+                                                "companyState"    : String,
+                                                "companyCountry"  : String,
+                                            }
+                                        ],
+                "bankDetails"             : [
+                                            {
+                                                "accHolderName" : String,
+                                                "bankName"      : String,
+                                                "branchName"    : String,
+                                                "accNumber"     : String,
+                                                "ifscCode"      : String,
+                                            }
+                                        ],
+                "taxSettings"             : [
+                                            {
+                                                "taxType"         : String,
+                                                "applicableTax"   : String,
+                                                "effectiveFrom"   : String,
+                                                "effectiveTo"     : String,
+                                            }
+                                        ]
+			}
+
+Output	: If Successfully
+			{
+				message : "CompanySetting Added",
+				ID 		: String //_id of the document
+			}
+
+=====================================================================================
+2. Fetch Masternotification Details
+=====================================================================================
+
+Method  : GET
+
+URL 	: '/api/companysettings/get/:ID'
+
+Input	: - NA -
+			
+
+Output	: If Successfully
+			{
+				"_id"					 : String,
+				"companyId"				 : String,
+			    "companyName"            : String,
+                "companyContactNumber"   : String,
+                "companyMobileNumber"    : String,
+                "companyEmail"           : String,
+                "companyAltEmail"        : String,
+                "logoFilename"           : String,
+                "companyUniqueID"        : String,
+                "companyLogo"            : String,
+                "companyLocationsInfo"   : [
+	                                            {
+	                                                "Location"        : String,
+	                                                "companyAddress"  : String,
+	                                                "companyPincode"  : String,
+	                                                "companyCity"     : String,
+	                                                "companyState"    : String,
+	                                                "companyCountry"  : String,
+	                                            }
+                                        	],
+                "bankDetails"             : [
+	                                            {
+	                                                "accHolderName" : String,
+	                                                "bankName"      : String,
+	                                                "branchName"    : String,
+	                                                "accNumber"     : String,
+	                                                "ifscCode"      : String,
+	                                            }
+	                                        ],
+                "taxSettings"             : [
+	                                            {
+	                                                "taxType"         : String,
+	                                                "applicableTax"   : String,
+	                                                "effectiveFrom"   : String,
+	                                                "effectiveTo"     : String,
+	                                            }
+	                                        ]
+			}
+		  If not successful
+		  	{
+		  		message : "ROLE_NOT_FOUND",
+		  	}
+
+=====================================================================================
+3. Update Masternotification Details
+=====================================================================================
+
+Method  : PUT
+
+URL 	: '/api/companysettings/put/:ID'
+
+Input	: 
+			{
+			    "masternotificationId"	: String,
+		        "toMailId"				: String,
+		        "toUserId"				: String,
+		        "notifBody"				: String,
+		        "status"				: String,
+			}
+
+Output	: If Successfully
+			{
+				message : "ROLE_UPDATED",
+			}
+		  If not successful
+		  	{
+		  		message : "ROLE_NOT_UPDATED",
+		  	}
+
+=====================================================================================
+4. Delete Masternotification Details
+=====================================================================================
+
+Method  : DELETE
+
+URL 	: '/api/companysettings/delete/:ID'
+
+Input	: - NA -
+			
+
+Output	: If Successfully
+			{
+			    message : "Role_DATA_DELETE",
+			}
+		  If not successful
+		  	{
+		  		message : "DATA_NOT_FOUND",
+		  	}
+
+=====================================================================================
+5. List All the documents
+=====================================================================================
+
+Method  : GET
+
+URL 	: '/api/companysettings/get/:pageno'
+
+Input	: - NA -
+			
+
+Output	: If Successfully
+			[{
+			    _id			: String,
+			    role        : String,
+			    createdAt   : Date,
+			    createdBy   : String
+			}]
+		  If not successful
+		  	{
+		  		message : "DATA_NOT_FOUND",
+		  	}
+
+=====================================================================================
+6. Delete all Masternotification
+=====================================================================================
+
+Method  : DELETE
+
+URL 	: '/api/companysettings/delete/all'
+
+Input	: - NA -
+			
+
+Output	: If Successfully
+			{
+			    message : "Role_DELETE",
+			}
+		  If not successful
+		  	{
+		  		message : "DATA_NOT_FOUND",
+		  	}

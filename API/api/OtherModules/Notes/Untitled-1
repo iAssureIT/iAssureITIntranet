@@ -1,0 +1,218 @@
+
+
+
+listofCenter :
+{
+     _id		: mongoose.Schema.Types.ObjectId,
+    type        : String,
+    centerName  : String,
+    address: ,
+    state: ,
+    district: ,
+    pincode: ,
+
+    districtsCovered: [district1, district2],
+    blocksCovered: [
+        {district: xx, block: xx}
+        {district: xx, block: xx}
+        {district: xx, block: xx}
+        {district: xx, block: xx}
+    ],
+    villagesCovered: [
+        {district: xx, block: xx, village: xx,}
+        {district: xx, block: xx, village: xx,}
+        {district: xx, block: xx, village: xx,}
+        {district: xx, block: xx, village: xx,}
+    ],
+    establishmentDate: ,
+
+    centerIncharge : {
+        name: ,
+        mobile: ,
+        email: ,
+    },
+    misCoordinator:{
+        name: ,
+        mobile: ,
+        email: ,        
+    }
+
+    createdBy   : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    createdAt   : Date
+}
+
+
+
+
+Sectors :
+{
+     _id		: mongoose.Schema.Types.ObjectId,
+    sector      : String,
+    activity    : [{
+                    activityName : string,
+                    subactivity  : [{
+                                        subactivityName     : String,
+                                        unit                : String,
+                                        familyUpgradation   : String,
+                                        outreach            : String 
+                                     }]
+                   }],
+    createdBy   : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    createdAt   : Date
+
+}
+
+sectorMapping :
+{
+    _id		    : mongoose.Schema.Types.ObjectId,
+    type        : String,
+    goal        : String,
+    activities  :   [{
+                        sector   : String,
+                        activity : String
+                    }]
+    createdBy   : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    createdAt   : Date
+}
+
+
+beneficiaryFamilies :
+{
+    _id		        : mongoose.Schema.Types.ObjectId,
+    familyID        : String,
+    familyHead      : String,
+    contactNumber   : String,
+    uidNumber       : String,
+    cast            : String,
+    familyCategory  : String,
+    center          : String,
+    state           : String,
+    dist            : String,
+    block           : String,
+    village         : String,
+    
+    createdBy       : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    createdAt       : Date
+
+}
+beneficiaries   :
+{
+    _id	    	        : mongoose.Schema.Types.ObjectId,
+    family_ID           : { type: mongoose.Schema.Types.ObjectId, ref: 'beneficiaryFamilies' },
+    familyID            : { type: String, ref: 'beneficiaryFamilies' },
+
+    beneficariesId      : String,
+    nameofbeneficary    : String
+}
+
+
+annualPlan:{
+    _id		            : mongoose.Schema.Types.ObjectId,
+    year                : Date,
+    center              : _id,
+    sector_ID           : _id,
+    sectorName          : String,
+    activity            : String,
+    physicalUnit        : String,
+    unitCost            : String,
+    totalBudget         : Number,
+    noOfBeneficaries    : Number,
+    financialSource     :   [{
+                                LHWRF               : Number,
+                                NABARD              : Number,
+                                bankLoan            : Number,
+                                govtscheme          : Number,
+                                directCC            : Number,
+                                indirectCC          : Number,
+                                other               : Number
+                            }],
+    remark              : String
+}
+
+
+monthlyPlan:{
+    _id		            : mongoose.Schema.Types.ObjectId,
+    month               : String,
+    year                : Date,
+    center              : _id,
+    sector_ID           : _id,
+    sectorName          : String,
+    activity            : String,
+    physicalUnit        : String,
+    unitCost            : String,
+    totalBudget         : Number,
+    noOfBeneficaries    : Number,
+    financialSource     :   [{
+                                LHWRF               : Number,
+                                NABARD              : Number,
+                                bankLoan            : Number,
+                                govtscheme          : Number,
+                                directCC            : Number,
+                                indirectCC          : Number,
+                                other               : Number
+                            }],
+    
+    remark              : String,
+    createdBy       : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    createdAt       : Date
+}
+
+activityReport  :
+{
+    _id	    	        : mongoose.Schema.Types.ObjectId,
+    center_ID           : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    centerName          : String,
+    dist                : String,
+    block               : String,
+    village             : String,
+    Date                : Date,
+    sector              : String,
+    typeofactivity      : String,
+   
+    activity            : String,
+    subactivity         : String,
+    unit                : String,
+    unitCost            : Number,
+    quantity            : Number,
+    totalcost           : Number,
+
+    sourceofFund        :   [{
+                                LHWRF               : Number,
+                                NABARD              : Number,
+                                bankLoan            : Number,
+                                govtscheme          : Number,
+                                directCC            : Number,
+                                indirectCC          : Number,
+                                other               : Number,
+                                total               : Number
+                            }],
+    createdBy           : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    createdAt           : Date
+}
+
+
+
+
+
+
+
+Notes :
+
+sector :
+outreach and familyUpgradation should be Number
+
+center revisit
+
+beneficiaryFamilies : 
+- discussion about realtion with  family head 
+- Do we need to store number of beneficaries
+
+activityReport :
+ (typeofactivity and   nameofactivity)  why it needed?
+
+ -beneficiary need to discuss 
+ 
+ (number of grampanchayat and number of village) Need to discuss
+
+
+ (Highlights photos and  case study) 

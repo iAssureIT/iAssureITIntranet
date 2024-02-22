@@ -1,0 +1,164 @@
+Status : 
+		YTS 	: Yet to Start, 
+		WIP 	: Can be used with limitations
+		TIP		: Testing in process
+		Done	: Tested and can be used
+
+Notes  : 
+		1. AWS Keys
+			{
+				"type"		  : "S3"
+			    "key"         : String,
+			    "secret"      : String,
+			    "bucket"      : String,
+			    "region"      : String,
+			}	
+		2. SMS Gateway keys
+			{
+				"type"		  : "SMS"
+			    "key"         : String,
+			    "secret"      : String,
+			}
+		3. GOOGLE API keys
+			{
+				"type"		  : "GOOGLE"
+			    "key"         : String,
+			}
+
+API : 
+
+1. Insert Details 								- Done
+2. Fetch Details								- Done
+3. Update Details								- Done
+4. Delete Details								- Done
+5. List All the documents						- Done
+
+=====================================================================================
+1. Insert Details
+=====================================================================================
+
+	Method  		: POST
+
+	URL 			: '/api/projectsettings/post'
+
+	Required Fields : For S3 		- key, secret, bucket, region
+					  For SMS 		- key,secret
+					  For GOOGLE	- key
+
+	Input			: 
+						{
+							"type" 		  : String, //S3, SMS or GOOGLE
+						    "key"         : String,
+						    "secret"      : String,
+						    "bucket"      : String,
+						    "region"      : String,
+						}
+
+	Output			: If Successfully
+						{
+							message : "DETAILS_INSERTED",
+							ID 		: String //_id of the document
+						}
+					  If not successful
+					  	{
+					  		message : "REQUIRED_FIELDS : " + Required field list
+					  	}
+
+=====================================================================================
+2. Fetch Details
+=====================================================================================
+
+	Method  : GET
+
+	URL 	: '/api/projectsettings/get/:type'
+
+	Input	: - NA -
+				
+
+	Output	: If Successfully
+				{
+				    "key"         : String,
+				    "secret"      : String,
+				    "bucket"      : String,
+				    "region"      : String,
+				}
+			  If not successful
+			  	{
+			  		message : "DATA_NOT_FOUND",
+			  	}
+
+=====================================================================================
+3. Update Details
+=====================================================================================
+
+Method  : PATCH
+
+URL 	: '/api/projectsettings/patch/S3'
+
+Input	: 
+			{
+			    "key"         : String,
+			    "secret"      : String,
+			    "bucket"      : String,
+			    "region"      : String,
+			}
+
+Output	: If Successfully
+			{
+				message : "S3_DETAILS_UPDATED",
+				data	: {
+						    "key"         : String,
+						    "secret"      : String,
+						    "bucket"      : String,
+						    "region"      : String,
+						  }
+			}
+		  If not successful
+		  	{
+		  		message : "ALL_ARE_REQUIRED_FIELDS:keys,secret,bucket,region",
+		  	}
+
+=====================================================================================
+4. Delete Details
+=====================================================================================
+
+Method  : DELETE
+
+URL 	: '/api/projectsettings/delete/S3/:ID'
+
+Input	: - NA -
+			
+
+Output	: If Successfully
+			{
+			    message : "S3_DATA_DELETE",
+			}
+		  If not successful
+		  	{
+		  		message : "DATA_NOT_FOUND",
+		  	}
+
+=====================================================================================
+5. List All the documents
+=====================================================================================
+
+Method  : GET
+
+URL 	: '/api/projectsettings/get/all'
+
+Input	: - NA -
+			
+
+Output	: If Successfully
+			[{
+				"type" 	      : String,
+			    "key"         : String,
+			    "secret"      : String,
+			    "bucket"      : String,
+			    "region"      : String,
+			}]
+		  If not successful
+		  	{
+		  		message : "DATA_NOT_FOUND",
+		  	}
+
