@@ -7,6 +7,7 @@ import DeliveryDepartment from './pages/DeliveryDepartment/DeliveryDepartment';
 import HumanResource from './pages/HumanResource/HumanResource';
 import Profile from './pages/Profile/Profile';
 import Login from './pages/Login/Login';
+import Masters from './pages/Masters/Masters';
 import UserManagement from './pages/UserManagement/UserManagement';
 import OnBoardingForm from './pages/OnBoardingForm/OnBoardingForm';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -53,6 +54,7 @@ const Layout = ({ children }) => {
                             <Route path="/humanresource" element={<HumanResource />} exact />
                             <Route path="/profile" element={<Profile />} exact />
                             <Route path="/usermanagement" element={<UserManagement />} exact />
+                            <Route path="/masters" element={<Masters />} exact />
                         </Routes>
                     </div>
                 </div>

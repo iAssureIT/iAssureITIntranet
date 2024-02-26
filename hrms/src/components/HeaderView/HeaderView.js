@@ -30,11 +30,11 @@ useEffect(() => {
   return(
     <div className='bg-site p-2 flex items-center w-full border-b-2' >
         <div className='ml-auto pr-2'>
-        <FontAwesomeIcon  className='w-10 h-8 cursor-pointers justify-end mr-8 p-2'  icon={faBell} color='#fff' onClick={()=>setOpen(!open)}/> 
-        <FontAwesomeIcon  className='w-8 h-8 cursor-pointers bg-red-500 justify-end border rounded-full rounded p-2' id="clickable"  data-tooltip-place="top" icon={faUser} color='#fff' onClick={()=>setOpen(!open)}/> 
+          <FontAwesomeIcon  className='w-10 h-8 cursor-pointers justify-end mr-8 p-2'  icon={faBell} color='#fff' onClick={()=>setOpen(!open)}/> 
+          <FontAwesomeIcon  className='w-8 h-8 cursor-pointers bg-red-500 justify-end border rounded-full rounded p-2' id="clickable"  data-tooltip-place="top" icon={faUser} color='#fff' onClick={()=>setOpen(!open)}/> 
         </div>
         <hr/>
-        <Tooltip anchorSelect="#clickable" place="bottom" effect="solid" className="tooltip " clickable>
+        <Tooltip anchorSelect="#clickable" place="bottom" effect="solid" className="tooltip " style={{ zIndex: 99 }} clickable>
         <div className="flex items-center">
           {/* User image and details */}
           <div className="rounded-full mr-4">

@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        "site" :"#428BCA",
+        "site" :"#428BCB",
         "light-white" : "rgba(255,255,255,0.17)"
       }
     },

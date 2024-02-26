@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars,faGlobe,faUserShield,faUser, faAngleLeft,faAngleRight,faBuilding,faUserTie, faUsers} from '@fortawesome/free-solid-svg-icons';
+import { faBars,faGlobe,faUserShield,faUser, faAngleLeft,faAngleRight,faBuilding,faUserTie, faUsers, faDashboard} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
  import {Link} from 'react-router-dom';
@@ -14,6 +14,7 @@ const SideBar=({handleCallback})=>{
         {title:"HUMAN RESOURSE",src:faUserShield,link:"humanresource"},
         {title:"IT",src:faUserTie,link:"itpage"},
         {title:"DELIVERY DEPARTMENT",src:faBuilding,link:"deliveryDepartment"},
+        {title:"MASTERS",src:faDashboard,link:"masters"},
         {title:"USER MANAGEMENT",src:faUsers,link:"usermanagement"},
     ]
 

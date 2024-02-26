@@ -88,7 +88,8 @@ const consultantApprovalRoutes          = require('./api/admin2.0/consultantAppr
 
 const productController 				= require('./api/admin2.0/products/Routes')
 const orderProductController 			= require('./api/admin2.0/orderProduct/Routes')
-
+const departmentRoutes                   = require('./api/admin2.0/departmentMaster/RoutesDepartmentMaster.js')
+const designationRoutes                   = require('./api/admin2.0/designationMaster/RoutesDesignationMaster.js')
 
 app.use("/startup", startupRoutes);	
 app.use("/api/auth", systemRoutes);
@@ -133,6 +134,8 @@ const SearchResults 					= require("./api/admin2.0/searchResults/routes.js");
 
 
 //================ admin2.0 ==================
+app.use("/api/designation", designationRoutes);
+app.use("/api/department", departmentRoutes);
 app.use("/api/businesscategory", MasterBusinessCategory);
 app.use("/api/business-expertise", MasterBusinessExpertise);
 app.use("/api/business-subcategory", MasterBusinessSubCategory);

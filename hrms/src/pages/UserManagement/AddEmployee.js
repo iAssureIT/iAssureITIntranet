@@ -10,6 +10,8 @@ function AddEmployee(props) {
     console.log("props",props);
     const [open,setOpen] = useState(true);
     const [roleList,setRoleList] = useState([]);
+    const [departmentList,setDepartmentList] = useState([]);
+    const [designationList,setDesignationList] = useState([]);
     const {
         register,
         handleSubmit,
@@ -18,7 +20,9 @@ function AddEmployee(props) {
       } = useForm()
 
     useEffect(() => {
-        getRoleList()
+        getRoleList();
+        getDepartmentList();
+        getDesignationList();
       },[1]);
 
       const getRoleList =()=>{
@@ -34,6 +38,42 @@ function AddEmployee(props) {
              roleList.push(roleData);
          }
          setRoleList(roleList)
+         console.log("roleList",roleList);
+        })
+        .catch((err)=>console.log("err",err))
+    }
+
+    const getDepartmentList =()=>{
+        axios.post('/api/department/get/list')
+        .then((response) => {
+         console.log("response role",response);
+         var departmentList = [];
+         for (let index = 0; index < response.data.length; index++) {
+             let data ={
+                department_id : response.data[index]._id,
+                department:response.data[index].department
+             } 
+             departmentList.push(data);
+         }
+         setDepartmentList(departmentList)
+         console.log("roleList",roleList);
+        })
+        .catch((err)=>console.log("err",err))
+    }
+
+    const getDesignationList =()=>{
+        axios.post('/api/designation/get/list')
+        .then((response) => {
+         console.log("response role",response);
+         var designationList = [];
+         for (let index = 0; index < response.data.length; index++) {
+             let data ={
+                designation_id : response.data[index]._id,
+                designation:response.data[index].designation
+             } 
+             designationList.push(data);
+         }
+         setDesignationList(designationList)
          console.log("roleList",roleList);
         })
         .catch((err)=>console.log("err",err))
@@ -101,13 +141,39 @@ function AddEmployee(props) {
                                 }
                             </select>
                         </div> 
+                        <div >
+                            <label for="department" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                            <select id="department" {...register("department",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Select Department</option>
+                                {departmentList &&
+                                    departmentList.map((item,index)=>{
+                                        return(
+                                            <option value={item.department}>{item.department}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div> 
+                        <div >
+                            <label for="designation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                            <select id="designation" {...register("designation",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Select Designation</option>
+                                {designationList &&
+                                    designationList.map((item,index)=>{
+                                        return(
+                                            <option value={item.role}>{item.designation}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div> 
                         <div className="mb-6">
                              <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                             <input type="password" {...register("password",{required:true})} id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Password..." required />
                         </div> 
                     </div>
                    
-                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                    <button type="submit" className="text-white bg-site hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                 </form>
         </div>
         </div>

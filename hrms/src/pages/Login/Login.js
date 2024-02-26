@@ -6,9 +6,11 @@ import {useNavigate} from 'react-router-dom';
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from 'axios';
 import swal from 'sweetalert';
+import { EyeIcon } from '@heroicons/react/24/outline';
 
 
 function Login() {
+    const [showPassword,setShowPassword]= useState(false);
     const {
         register,
         handleSubmit,
@@ -46,7 +48,7 @@ function Login() {
                 localStorage.setItem("loggedIn", true);
                 localStorage.setItem("companyID", response.data.userDetails.companyID);
                 localStorage.setItem('userDetails', JSON.stringify(userDetails));
-                navigate('/dashboard');
+                navigate('/');
                 window.location.reload();
               } else if (response.data.message === "USER_BLOCK") {
                 swal({
@@ -112,6 +114,19 @@ function Login() {
                   <div>
                       <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                       <input type="password" {...register("password",{required:true})}  name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required=""/>
+                      <span id="id-password" 
+                    //   onClick={this.togglePassword.bind(this)} 
+                      className={"fa fa-eye-slash toggleEye top-4 right-4"}></span>
+                      {/* <div
+                        className="icon_button absolute right-4 top-14"
+                        // onClick={handleClickShowPassword}
+                        >
+                      {showPassword ? (
+                            <EyeIcon className="h-6 font-extralight" />
+                        ) : (
+                            <EyeIcon className="h-6 font-extralight" />
+                        )}
+                    </div>     */}
                       {errors.exampleRequired && <span>This field is required</span>}
                   </div>
                   <div className="flex items-center justify-between">

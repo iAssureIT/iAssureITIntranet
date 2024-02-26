@@ -9,14 +9,14 @@ import swal from 'sweetalert';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 
-const TABLE_HEAD = ["Role",  "Action"];
+const TABLE_HEAD = ["Designation",  "Action"];
 
-function AddRole() {
+function AddDesignation() {
     const [open,setOpen] = useState(true);
-    const [roleList,setRoleList] = useState([]);
+    const [designationList,setdesignationList] = useState([]);
     const [update,setUpdate] = useState(false);
-    const [role,setRole] = useState('');
-    const [role_id,setRoleId] = useState('');
+    const [designation,setdesignation] = useState('');
+    const [designation_id,setdesignationId] = useState('');
     const {
         register,
         handleSubmit,
@@ -26,7 +26,7 @@ function AddRole() {
 
 
     useEffect(() => {
-        getRoleList()
+        getdesignationList()
       },[1]);
 
       const onSubmit = (data) => {
@@ -35,26 +35,26 @@ function AddRole() {
         
           if(update){
             var formValues = {
-                fieldValue: data.role.toString().toLowerCase(),
-                fieldID :role_id,
+                fieldValue: data.designation,
+                fieldID :designation_id,
                 updatedBy : user.user_id,
               }
-            axios.patch('/api/roles/patch', formValues)
+            axios.patch('/api/Designation/patch', formValues)
           .then((response) => {
                 console.log("response",response);
                   if(response.updated){
                     swal({
-                        text: "Role Updated Successfully."
+                        text: "Designation Updated Successfully."
                     });
                 }else{
                     swal({
-                        text: "Role Already Added."
+                        text: "Designation Already Added."
                     });
                 }
                 setUpdate(false);
-                setRoleId('');
-                getRoleList();
-                setRole('');
+                setdesignationId('');
+                getdesignationList();
+                setdesignation('');
   
           })
           .catch((error) => {
@@ -64,23 +64,23 @@ function AddRole() {
         }
        else{
         var formValues = {
-            fieldValue: data.role.toString().toLowerCase(),
+            fieldValue: data.designation,
             user_id: user.user_id,
           }
-        axios.post('/api/roles/post', formValues)
+        axios.post('/api/Designation/post', formValues)
             .then((response) => {
                 console.log("response",response);
                 if(response.created){
                     swal({
-                        text: "Role Added Successfully."
+                        text: "Designation Added Successfully."
                     });
                 }else{
                     swal({
-                        text: "Role Already Added."
+                        text: "Designation Already Added."
                     });
                 }
-                getRoleList();
-                setRole('');
+                getdesignationList();
+                setdesignation('');
             })
             .catch((error) => {
             console.log("error", error);
@@ -90,40 +90,40 @@ function AddRole() {
         
     };
 
-    const getRoleList =()=>{
-        axios.post('/api/roles/get/list')
+    const getdesignationList =()=>{
+        axios.post('/api/Designation/get/list')
         .then((response) => {
-         console.log("response role",response);
-         var roleList = [];
+         console.log("response designation",response);
+         var designationList = [];
          for (let index = 0; index < response.data.length; index++) {
-             let roleData ={
-                role_id : response.data[index]._id,
-                role:response.data[index].role
+             let designationData ={
+                designation_id : response.data[index]._id,
+                designation:response.data[index].designation
              } 
-             roleList.push(roleData);
+             designationList.push(designationData);
          }
-         setRoleList(roleList)
-         console.log("roleList",roleList);
+         setdesignationList(designationList)
+         console.log("designationList",designationList);
         })
         .catch((err)=>console.log("err",err))
     }
 
     const editUser=(data)=>{
-        console.log("role",data);
+        console.log("designation",data);
         setUpdate(true);
-        setRole(data.role) ;
-        setRoleId(data.role_id)
+        setdesignation(data.designation) ;
+        setdesignationId(data.designation_id)
     }
 
     const deleteUser=(data)=>{
-        console.log("role",data);
-        axios.delete('/api/roles/delete/'+data.role_id)
+        console.log("designation",data);
+        axios.delete('/api/Designation/delete/'+data.designation_id)
         .then((response) => {
-         console.log("response role",response);
+         console.log("response designation",response);
             swal({
-            text: "Role Deleted Successfully."
+            text: "Designation Deleted Successfully."
             });
-            getRoleList();
+            getdesignationList();
         })
         .catch((err)=>console.log("err",err))
     }
@@ -136,7 +136,7 @@ function AddRole() {
         <div className='grid  grid-cols bg-grey-200 mb-8'>
             <form className='flex grid-cols'  onSubmit={handleSubmit(onSubmit)}>
                 <div class="grid mb-6 md:grid-cols-2">
-                        <input type="text" id="role"{...register("role",{required:true})} value={role} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Add Role..." required onChange={(e)=>setRole(e.value)} />
+                        <input type="text" id="designation"{...register("designation",{required:true})} value={designation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Add Designation..." required onChange={(e)=>setdesignation(e.value)} />
                </div>
                <div class="grid mb-6 md:grid-cols-2">
                     <button type="submit" className="text-white bg-site hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{update?"Update":"Submit"}</button>
@@ -165,29 +165,29 @@ function AddRole() {
                     </tr>
                 </thead>
                 <tbody>
-                    {roleList.map(({ role }, index) => {
-                    const isLast = index === roleList.length - 1;
+                    {designationList.map(({ designation }, index) => {
+                    const isLast = index === designationList.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                     return (
-                        <tr key={role}>
+                        <tr key={designation}>
                         <td className={classes}>
                             <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                             >
-                            {role}
+                            {designation}
                             </Typography>
                         </td>
                         <td className={classes}>
                       <Tooltip content="Edit User" >
-                        <IconButton variant="text" onClick={()=>editUser(roleList[index])}>
+                        <IconButton variant="text" onClick={()=>editUser(designationList[index])}>
                           <PencilIcon className="h-4 w-4" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip content="Delete User">
-                        <IconButton variant="text"  onClick={()=>deleteUser(roleList[index])}>
+                        <IconButton variant="text"  onClick={()=>deleteUser(designationList[index])}>
                           <TrashIcon className="h-4 w-4" />
                         </IconButton>
                       </Tooltip>
@@ -203,4 +203,4 @@ function AddRole() {
   );
 }
 
-export default AddRole;
+export default AddDesignation;

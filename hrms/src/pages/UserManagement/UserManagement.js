@@ -11,7 +11,7 @@ import { Button, Modal } from 'flowbite-react';
 
 
 
-const TABLE_HEAD = ["Name", "Email", "Mobile Number","Role","Last Logged In", "Action"];
+const TABLE_HEAD = ["Name", "Email", "Mobile Number","Role","Status","Last Logged In", "Action"];
 
 function UserManagement() {
     const [open,setOpen] = useState(true);
@@ -41,6 +41,7 @@ function UserManagement() {
                 email:response.data[index].email,
                 mobile:response.data[index].mobNumber,
                 role:response.data[index].role,
+                status : response.data[index].status,
                 lastloggedin:response.data[index].lastLogin
             } 
             userList.push(userData);
@@ -66,19 +67,19 @@ function UserManagement() {
             {/* <AddEmployee getUserList={getUserList}/> */}
 
            
-            <Card className="h-full w-full overflow-scroll mt-4">
+            <Card className="h-full w-full overflow-scroll mt-16">
                 <table className="w-full min-w-max table-auto text-left">
                 <thead>
                     <tr>
                     {TABLE_HEAD.map((head) => (
                         <th
                         key={head}
-                        className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                        className="border-b border-blue-gray-100 bg-site p-4"
                         >
                         <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal leading-none opacity-70"
+                            className="font-normal leading-none text-white"
                         >
                             {head}
                         </Typography>
@@ -87,7 +88,7 @@ function UserManagement() {
                     </tr>
                 </thead>
                 <tbody>
-                    {userList.map(({ name, email, mobile,role,lastloggedin }, index) => {
+                    {userList.map(({ name, email, mobile,role,status,lastloggedin }, index) => {
                     const isLast = index === userList.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -133,9 +134,18 @@ function UserManagement() {
                             <Typography
                             variant="small"
                             color="blue-gray"
+                            className={status === "active" ?"bg-green-400 font-normal flex justify-center text-white": "bg-danger-400 text-white font-normal item-center"}
+                            >
+                            {status}
+                            </Typography>
+                        </td>
+                        <td className={classes}>
+                            <Typography
+                            variant="small"
+                            color="blue-gray"
                             className="font-normal"
                             >
-                            {lastloggedin}
+                            {lastloggedin? lastloggedin:"Not Logged In"}
                             </Typography>
                         </td>
                         <td className={classes}>
