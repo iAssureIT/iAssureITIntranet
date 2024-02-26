@@ -2271,50 +2271,50 @@ exports.user_signup_user = (req, res, next) => {
                               if (!user.roles.includes("admin")) {
                                 //send Notification, email, sms to customer
 
-                                var userNotificationValues = {
-                                  event: "Sign Up OTP",
-                                  toUser_id: user._id.toString(),
-                                  toEmail: user.profile.email,
-                                  toMobileNumber:
-                                    user.profile.isdCode + user.profile.mobile,
-                                  toUserRole: user.roles[0],
-                                  userDetails: user,
-                                  variables: {
-                                    userName: userName,
-                                    OTPSendForReason: "OTP for SignUp",
-                                    OTPValue: otp,
-                                  },
-                                };
-                                var send_notification_to_user =
-                                  await sendNotification(
-                                    userNotificationValues
-                                  );
+                                // var userNotificationValues = {
+                                //   event: "Sign Up OTP",
+                                //   toUser_id: user._id.toString(),
+                                //   toEmail: user.profile.email,
+                                //   toMobileNumber:
+                                //     user.profile.isdCode + user.profile.mobile,
+                                //   toUserRole: user.roles[0],
+                                //   userDetails: user,
+                                //   variables: {
+                                //     userName: req.body.userName,
+                                //     OTPSendForReason: "OTP for SignUp",
+                                //     OTPValue: otp,
+                                //   },
+                                // };
+                                // var send_notification_to_user =
+                                //   await sendNotification(
+                                //     userNotificationValues
+                                //   );
 
                                 //send Notification, email, sms to admin
-                                var adminNotificationValues = {
-                                  event: "Sign Up OTP",
-                                  toUser_id: user._id.toString(),
-                                  toEmail: user.profile.email,
-                                  toMobileNumber:
-                                    user.profile.isdCode + user.profile.mobile,
-                                  toUserRole: user.roles[0],
-                                  userDetails: user,
-                                  variables: {
-                                    firstName: result.profile.firstName,
-                                    lastName: result.profile.lastName,
-                                    fullName: result.profile.fullName,
-                                    emailId: result.profile.email,
-                                    mobileNumber: result.profile.mobile,
-                                    loginID: result.username,
-                                    signupDate: moment(result.createdAt).format(
-                                      "MMMM Do YYYY, h:mm:ss a"
-                                    ),
-                                  },
-                                };
-                                var send_notification_to_user =
-                                  await sendNotification(
-                                    adminNotificationValues
-                                  );
+                                // var adminNotificationValues = {
+                                //   event: "Sign Up OTP",
+                                //   toUser_id: user._id.toString(),
+                                //   toEmail: user.profile.email,
+                                //   toMobileNumber:
+                                //     user.profile.isdCode + user.profile.mobile,
+                                //   toUserRole: user.roles[0],
+                                //   userDetails: user,
+                                //   variables: {
+                                //     firstName: result.profile.firstName,
+                                //     lastName: result.profile.lastName,
+                                //     fullName: result.profile.fullName,
+                                //     emailId: result.profile.email,
+                                //     mobileNumber: result.profile.mobile,
+                                //     loginID: result.username,
+                                //     signupDate: moment(result.createdAt).format(
+                                //       "MMMM Do YYYY, h:mm:ss a"
+                                //     ),
+                                //   },
+                                // };
+                                // var send_notification_to_user =
+                                //   await sendNotification(
+                                //     adminNotificationValues
+                                //   );
                               }
                               res.status(200).json({
                                 message: "USER_CREATED",
@@ -3867,6 +3867,7 @@ exports.user_login = (req, res, next) => {
                         roles: user.roles,
                         ID: user._id,
                         companyID: user.profile.companyID,
+                        approvalStatus:user.approvalStatus,
                         userDetails: {
                           firstName: user.profile.firstname,
                           lastName: user.profile.lastname,

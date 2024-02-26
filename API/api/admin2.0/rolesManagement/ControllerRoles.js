@@ -79,12 +79,12 @@ exports.detail_role = (req,res,next)=>{
         });
 };
 exports.update_role = (req,res,next)=>{ 
- 
+    console.log("req.body",req.body);
     if(req.body.fieldValue){
         Role.findOne({role:req.body.fieldValue})
     		.exec()
     		.then(data =>{
-
+                console.log("data",data);
     			if(data){
     				return res.status(200).json({
     					message: ' Role already exists'

@@ -28,6 +28,7 @@ router.patch('/patch/change-password-using-username', UserController.change_pass
 router.patch('/patch/set_send_otp/:username',           UserController.set_send_otp); 
 router.post('/getS3Details/S3',UserController.s3_details)
 
+router.post('/post/signup/user', UserController.user_signup_user); //Working
 
 
 

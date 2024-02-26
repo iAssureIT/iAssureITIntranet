@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faGlobe,faUserShield,faUser, faBell,faSignOut} from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import 'react-tooltip/dist/react-tooltip.css';
 import { Tooltip  } from 'react-tooltip';
 import {Link} from 'react-router-dom';
@@ -11,12 +11,20 @@ import {useNavigate} from 'react-router-dom';
 
 function HeaderView(){
 const navigate = useNavigate();
+const [user,setUser]=useState();
 
 const logOut =()=>{
+  localStorage.removeItem('userDetails');
   localStorage.removeItem('loggedIn');
   navigate('/login');
   window.location.reload();
-}
+} 
+
+useEffect(() => {
+  var user =  JSON.parse(localStorage.getItem('userDetails'));
+  setUser(user);
+  console.log("user",user);
+},[1]);
 
     const [open,setOpen] = useState(true);
   return(
@@ -34,11 +42,10 @@ const logOut =()=>{
             <FontAwesomeIcon  className='w-10 h-10 cursor-pointers rounded-full bg-red-500 justify-end border  p-2' data-tip data-for="userTooltip" icon={faUser} color='#fff' onClick={()=>setOpen(!open)}/> 
           </div>
           <div>
-            <div className="font-bold">Rushikesh Salunkhe</div>
-            <div>rushikesh.salunkhe@iassureit.com</div>
+            <div className="font-bold">{user?.firstName+" "+user?.lastName}</div>
+            <div>{user?.email}</div>
           </div>
         </div>
-
         {/* Buttons */}
         <div className="mt-4 flex">
           {/* My Profile button */}

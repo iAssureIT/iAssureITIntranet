@@ -1,9 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faGlobe,faUserShield,faUser, faThumbsUp,faUsers,faCalendarDay,faClipboardUser,faApartment} from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Card } from '@material-tailwind/react';
 function Dashboard() {
     const [open,setOpen] = useState(true);
+
+    useEffect(() => {
+        var user = localStorage.getItem('userDetails');
+        console.log("user",user);
+      });
+
   return (
     <div className="w-full App ">
       <div className='p-7 text-xl font-semibold  h-screen'>
