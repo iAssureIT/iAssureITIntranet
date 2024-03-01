@@ -12,7 +12,9 @@ import UserManagement from './pages/UserManagement/UserManagement';
 import OnBoardingForm from './pages/OnBoardingForm/OnBoardingForm';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
+import Policy from './pages/HumanResource/Policy';
+import PolicyView from './pages/HumanResource/PolicyView';
+import ApplicationMangement from './pages/ApplicationManagement/ApplicationManagement';
 const Layout = ({ children }) => {
     console.log("children",children);
     const [open,setOpen]=useState(false);
@@ -49,6 +51,9 @@ const Layout = ({ children }) => {
                             <Route path="/admin" element={<Admin />} />
                             <Route path="/" element={<Dashboard />} exact />
                             <Route path="/dashboard" element={<Dashboard />} exact />
+                            <Route path="/policy" element={<Policy />} exact />
+                            <Route path="/policy_view" element={<PolicyView />} exact />
+                            <Route path="/leavemanagement" element={<ApplicationMangement />} exact />
                             <Route path="/itpage" element={<IT />} exact />
                             <Route path="/deliveryDepartment" element={<DeliveryDepartment />} exact />
                             <Route path="/humanresource" element={<HumanResource />} exact />

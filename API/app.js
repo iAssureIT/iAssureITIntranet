@@ -80,6 +80,7 @@ const startupRoutes			   				= require("./api/admin2.0/userManagementnew/startup
 // Routes which should handle requests
 /*========== Core Admin ===================*/
 const systemRoutes			   	    	= require("./api/admin2.0/systemSecurity/Routes.js");
+const personMasterRoutes 				= require("./api/admin2.0/personMaster/RoutesPersonMaster.js");
 const usersRoutes			   			= require("./api/admin2.0/userManagementnew/RoutesUsers.js");
 const rolesRoutes			   			= require("./api/admin2.0/rolesManagement/RoutesRoles.js");
 const masternotificationRoutes		    = require('./api/admin2.0/notificationManagement/RoutesMasterNotification.js');
@@ -90,16 +91,19 @@ const productController 				= require('./api/admin2.0/products/Routes')
 const orderProductController 			= require('./api/admin2.0/orderProduct/Routes')
 const departmentRoutes                   = require('./api/admin2.0/departmentMaster/RoutesDepartmentMaster.js')
 const designationRoutes                   = require('./api/admin2.0/designationMaster/RoutesDesignationMaster.js')
+const policyController                       = require('./api/admin2.0/policyManagement/routes.js')
 
 app.use("/startup", startupRoutes);	
 app.use("/api/auth", systemRoutes);
 app.use("/api/users", usersRoutes);	
+app.use("/api/personmaster",personMasterRoutes)
 app.use("/api/roles", 						rolesRoutes);
 app.use("/api/masternotifications",	 		masternotificationRoutes);
 app.use('/api/notifications', 				notificationRoutes);
 app.use('/api/consultant-approval', 		consultantApprovalRoutes);
 app.use('/api/products',					productController);
 app.use('/api/order-product',				orderProductController);
+app.use('/api/policy',				policyController);
 
 
 /*=========== admin2.0 API ===============*/
@@ -136,6 +140,7 @@ const SearchResults 					= require("./api/admin2.0/searchResults/routes.js");
 //================ admin2.0 ==================
 app.use("/api/designation", designationRoutes);
 app.use("/api/department", departmentRoutes);
+app.use("/api/per", departmentRoutes);
 app.use("/api/businesscategory", MasterBusinessCategory);
 app.use("/api/business-expertise", MasterBusinessExpertise);
 app.use("/api/business-subcategory", MasterBusinessSubCategory);

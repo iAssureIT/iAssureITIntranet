@@ -9,6 +9,7 @@ import swal from 'sweetalert';
 function AddEmployee(props) {
     console.log("props",props);
     const [open,setOpen] = useState(true);
+    const [user,setUser]=useState();
     const [roleList,setRoleList] = useState([]);
     const [departmentList,setDepartmentList] = useState([]);
     const [designationList,setDesignationList] = useState([]);
@@ -20,6 +21,8 @@ function AddEmployee(props) {
       } = useForm()
 
     useEffect(() => {
+        var user =  JSON.parse(localStorage.getItem('userDetails'));
+  setUser(user);
         getRoleList();
         getDepartmentList();
         getDesignationList();
@@ -89,13 +92,20 @@ function AddEmployee(props) {
             "userName":data.email,
             "mobNumber": (data.phone).replace("-", ""),
             "pwd": "Welcome@123",
-            // "role": data.role !== "employee" ? ["  employee",data.role] : ["employee"],
+            "department" :data.department,
+            "designation" :data.designation,
             "role" :  [data.role],
             "companyID": 1,
             "status": "active",
+            "createdBy":user.user_id
           }
+          console.log("user",user);
         axios.post('/api/auth/post/signup/user',formValues)
         .then((res) => {
+            console.log("res",res);
+            formValues.userId = res.data.ID;
+            console.log("formValues",formValues);
+           addEmployee(formValues);
             swal({
                 text: res.data.message
             });
@@ -103,6 +113,15 @@ function AddEmployee(props) {
         })
         .catch((err)=>console.log("err",err))
     }   
+
+    const addEmployee=(data)=>{
+        axios.post('/api/personmaster/post',data)
+        .then((res) => {
+            console.log("res",res);
+        })
+        .catch((err)=>console.log("err",err))
+    }
+
     return (
     <div className="w-full  ">
       

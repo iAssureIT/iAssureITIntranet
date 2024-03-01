@@ -3076,6 +3076,31 @@ exports.update_user_profile = (req, res, next) => {
     });
 };
 
+// exports.getManagerList=(req, res, next)=>{
+//   User.find({roles:["manager"]})
+//   .exec()
+//   .then(data=>{
+//     res.status(200).json(data);
+//   })
+//   .catch(err=>{
+//     console.log("err",err)
+//   })
+// }
+
+exports.getManagerList = (req, res, next) => {
+  User.find({ roles: req.params.role })
+    .exec()
+    .then((data) => {
+      // console.log("data===>",data)
+      res.status(200).json({ data });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+};
+
+
+
 /**=========== Verify OTP ===========*/
 exports.verify_user_otp = (req, res, next) => {
   console.log("req body", req.body);
@@ -3250,3 +3275,5 @@ exports.update_user_company = (req, res, next) => {
 exports.update_complete_user_profile = (req, res, next) => {
   console.log("update_complete_user_profile req body => ", req.body);
 };
+
+

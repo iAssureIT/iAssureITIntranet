@@ -49,6 +49,8 @@ router.post('/post/deleteduser/list',UserController.post_list_deleted_users);
 
 router.get('/get/:ID',UserController.fetch_user_ID);
 
+router.get('/get/managerlist/:role',UserController.getManagerList);
+
 // router.patch('/patch/:ID', UserController.update_user_ID);
 
 
@@ -72,6 +74,7 @@ router.get('/get/onlineUserCount/count',UserController.onlineUserCount);
 
 // router.delete('/delete/users',UserController.deleteAllUsers);
 router.delete('/get/deleteAllUsers',UserController.deleteAllUsers);
+
 
 // =============
 
