@@ -6,9 +6,9 @@ const Tabs = ({ color }) => {
   return (
     <>
      <div className='p-7   h-screen'>
-      <div className='grid  grid-cols bg-grey-200 mb-8'>
-       <span className='text-left'>DASHBOARD</span>
-       </div>
+      <div className='grid  grid-cols bg-grey-200 mb-8 '>
+            <span className='text-xl  text-left'>MASTER</span>
+        </div>
         <div className="w-full grid  grid-cols-5 gap-3 p-4">
           <ul
             className=" mb-0 list-none  flex-wrap pt-3 pb-4 flex-row"

@@ -70,7 +70,7 @@ function AddRole() {
         axios.post('/api/roles/post', formValues)
             .then((response) => {
                 console.log("response",response);
-                if(response.created){
+                if(response.data.created){
                     swal({
                         text: "Role Added Successfully."
                     });
@@ -130,9 +130,6 @@ function AddRole() {
 
   return (
     <div className="w-full  ">
-      
-     
-      <div className='p-7 text-xl font-semibold'>
         <div className='grid  grid-cols bg-grey-200 mb-8'>
             <form className='flex grid-cols'  onSubmit={handleSubmit(onSubmit)}>
                 <div class="grid mb-6 md:grid-cols-2">
@@ -142,7 +139,6 @@ function AddRole() {
                     <button type="submit" className="text-white bg-site hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{update?"Update":"Submit"}</button>
                  </div>
             </form>
-        </div>
         </div>
         <Card className="h-full w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">

@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faPencil, faUser} from '@fortawesome/free-solid-svg-icons'
 import { useState,useEffect } from 'react';
-import { Card,Typography ,Tooltip,IconButton} from '@material-tailwind/react';
 import StatBox from '../../components/StatBox/StatBox';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
+import { Card,Typography ,Tooltip,IconButton} from '@material-tailwind/react';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 

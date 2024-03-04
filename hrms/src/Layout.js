@@ -46,7 +46,7 @@ const Layout = ({ children }) => {
                     <div >
                         <HeaderView />
                     </div>
-                    <div >
+                    <div className='bg-blue-100'>
                         <Routes >
                             <Route path="/admin" element={<Admin />} />
                             <Route path="/" element={<Dashboard />} exact />

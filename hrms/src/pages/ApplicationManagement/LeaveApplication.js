@@ -25,6 +25,7 @@ function LeaveApplication(props) {
 
     useEffect(() => {
         var user =  JSON.parse(localStorage.getItem('userDetails'));
+        console.log("user",user);
         setUser(user);
         getManagerList();
       },[props]);
@@ -32,8 +33,16 @@ function LeaveApplication(props) {
       const getManagerList =()=>[
         axios.get('/api/users/get/managerlist/manager')
         .then(res=>{
-            setManagerList(res.data);
-            console.log("managerlist=>",res);
+            console.log("res",res);
+            var userList = [];
+            for (let index = 0; index < res.data.data.length; index++) {
+                let userData ={
+                    _id  : res.data.data[index]._id,                
+                    name : res.data.data[index]?.profile?.fullName,
+                } 
+                userList.push(userData);
+            }
+            setManagerList(userList);
         })
         .catch(err=>{
             console.log("err",err);
@@ -79,24 +88,31 @@ function LeaveApplication(props) {
 
     return (
     <div className="w-full  ">
-      <div className='p-7 text-xl font-semibold'>
-        <div className='grid  grid-cols bg-grey-200 mb-8'>
+      <div className='p-7  font-semibold'>
+        <div className='grid  grid-cols bg-grey-200 '>
             {/* <span className='text-left'>Add Employee</span> */}
                 <form  onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid gap-6 mb-6 md:grid-cols-1">
                     <div >
+                            <div className='text-l'>Employee Name : <span  className='text-l'   >{user?.firstName+ " "+user?.lastName}</span></div>
+                        </div> 
+                    <div >
                             <label for="leave_type" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Reporting Manager</label>
                             <select id="leave_type" {...register("leave_type",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled selected>Select Reporting Manager</option>
-                                    {managerList  && managerList.lenth> 0 &&
+                                    {managerList  && managerList.length> 0 &&
                                     managerList.map((item,index)=>{
                                         return(
-                                            <option value={item?.profile?.fullName}>{item?.profile?.fullName}</option>
+                                            <option value={item?._id}>{item?.name}</option>
                                         )
                                     })
                                 }
                             </select>
                         </div> 
+                        <div>
+                            <label for="leave_subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Leave Subject</label>
+                            <input type="text" id="leave_subject" {...register("leave_subject",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Subject..." required />
+                        </div>
                         <div >
                             <label for="leave_type" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Leave Type</label>
                             <select id="leave_type" {...register("leave_type",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

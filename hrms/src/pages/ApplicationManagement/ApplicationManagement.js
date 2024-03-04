@@ -37,8 +37,8 @@ function ApplicationMangement() {
 
 
   return (
-    <div className="w-full App p-4">
-      <div className='text-xl font-semibold mb-8'>
+    <div className="w-full App p-4 h-screen">
+      <div className='text-xl font-semibold mb-8 '>
         <div className='grid  grid-cols bg-grey-200 '>
                 <span className='text-left'>Application Managment</span>
         </div>
