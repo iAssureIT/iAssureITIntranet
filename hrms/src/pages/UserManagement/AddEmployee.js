@@ -13,6 +13,7 @@ function AddEmployee(props) {
     const [roleList,setRoleList] = useState([]);
     const [departmentList,setDepartmentList] = useState([]);
     const [designationList,setDesignationList] = useState([]);
+    const [managerList,setManagerList] = useState([]);
     const {
         register,
         handleSubmit,
@@ -26,7 +27,29 @@ function AddEmployee(props) {
         getRoleList();
         getDepartmentList();
         getDesignationList();
+        getManagerList();
       },[1]);
+
+      const getManagerList =()=>[
+        axios.get('/api/users/get/managerlist/manager')
+        .then(res=>{
+            console.log("res",res);
+            var userList = [];
+            for (let index = 0; index < res.data.data.length; index++) {
+                let userData ={
+                    _id  : res.data.data[index]._id,                
+                    name : res.data.data[index]?.profile?.fullName,
+                    username : res.data.data[index]?.username
+                } 
+                userList.push(userData);
+            }
+            setManagerList(userList);
+        })
+        .catch(err=>{
+            console.log("err",err);
+        })
+      ]
+
 
       const getRoleList =()=>{
         axios.post('/api/roles/get/list')
@@ -186,9 +209,18 @@ function AddEmployee(props) {
                                 }
                             </select>
                         </div> 
-                        <div className="mb-6">
-                             <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input type="password" {...register("password",{required:true})} id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Password..." required />
+                        <div >
+                            <label for="reporting_manager" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Reporting Manager</label>
+                            <select id="reporting_manager" {...register("reporting_manager",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option disabled selected>Select Reporting Manager</option>
+                                    {managerList  && managerList.length> 0 &&
+                                    managerList.map((item,index)=>{
+                                        return(
+                                            <option value={item?.username+" "+item?._id}>{item?.name}</option>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div> 
                     </div>
                    

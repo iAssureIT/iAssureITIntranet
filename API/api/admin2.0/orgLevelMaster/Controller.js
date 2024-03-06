@@ -1,76 +1,65 @@
 const mongoose          = require("mongoose");
-const DesignationMaster     = require('./ModelDesignationMaster.js');
+const OrgLevelMaster     = require('./Model.js');
 const FailedRecords     = require('../failedRecords/Model.js');
 
-
-exports.insertDesignation = (req,res,next)=>{
+exports.insertOrgLevel = (req,res,next)=>{
     processData();
     async function processData(){
-
-    var allDesignations = await fetchDesignations();
-    var designation = allDesignations.filter((data)=>{
-        if (data.designation == req.body.fieldValue.trim().toLowerCase() && data.companyID == req.body.companyID) {
+    var allOrgLevel = await fetchOrgLevel();
+    var orgLevel = allOrgLevel.filter((data)=>{
+        if (data.orgLevel.trim().toLowerCase() == req.body.fieldValue.trim().toLowerCase() && data.companyID == req.body.companyID) {
+           
             return data;
         }
         })    
-    // console.log("designation",allDesignations);
-    // console.log("designation.length > 0",designation.length);
-        if (designation.length > 0) {
+        if (orgLevel.length > 0) {
             res.status(200).json({ duplicated : true });
         }else{
-            // console.log("designation",designation);
-            const designationMaster = new DesignationMaster({
-                            _id                         : new mongoose.Types.ObjectId(),
-                            companyID                   : req.body.companyID,
-                            designation                 : req.body.fieldValue,
-                            orgLevel                    : req.body.orgLevel,
-                            createdBy                   : req.body.createdBy,
-                            createdAt                   : new Date()
-                        })
-                        designationMaster.save()
-                        .then(data=>{
-                            //  console.log("designation data",data);
-                            res.status(200).json({ created : true, fieldID : data._id });
-                        })
-                        .catch(err =>{
-                            res.status(500).json({ error: err }); 
-                        });
-        }         
-    }    
+            const departmentMaster = new OrgLevelMaster({
+                _id                         : new mongoose.Types.ObjectId(),
+                orgLevel                    : req.body.fieldValue,
+                createdBy                   : req.body.createdBy,
+                createdAt                   : new Date()
+            })
+            departmentMaster.save()
+            .then(data=>{
+                res.status(200).json({ created : true, fieldID : data._id });
+            })
+            .catch(err =>{
+                res.status(500).json({ error: err }); 
+            });
+        }
+    }             
 };
-var fetchAllDesignations = async ()=>{
+
+var fetchAllOrgLevel = async ()=>{
     return new Promise(function(resolve,reject){ 
-    DesignationMaster.find()
-        .sort({createdAt : -1})
-        // .skip(req.body.startRange)
-        // .limit(req.body.limitRange)
+    OrgLevelMaster.find({})
+         .sort({createdAt : -1})
         .then(data=>{
             resolve( data );
         })
         .catch(err =>{
             reject(err);
-        });
+        }); 
     });
 };
 
-var fetchDesignations = async ()=>{
+var fetchOrgLevel = async ()=>{
     return new Promise(function(resolve,reject){ 
-    DesignationMaster.find()
+    OrgLevelMaster.find({})
         .sort({createdAt : -1})
-        // .skip(req.body.startRange)
-        // .limit(req.body.limitRange)
         .then(data=>{
-            // console.log("data===",data);
             resolve( data );
         })
         .catch(err =>{
             reject(err);
-        });
+        }); 
     });
 };
 
-exports.countDesignations = (req, res, next)=>{
-    DesignationMaster.find({}).count()
+exports.countOrgLevel = (req, res, next)=>{
+    OrgLevelMaster.find({}).count()
         .exec()
         .then(data=>{
             res.status(200).json({ count : data });
@@ -78,35 +67,37 @@ exports.countDesignations = (req, res, next)=>{
         .catch(err =>{
             res.status(500).json({ error: err });
         }); 
-};
-exports.fetchDesignations = (req, res, next)=>{
-    DesignationMaster.find({})
+}; 
+
+
+exports.fetchOrgLevel = (req, res, next)=>{
+    OrgLevelMaster.find({})
         .sort({createdAt : -1})
         .skip(req.body.startRange)
         .limit(req.body.limitRange)
         .exec()
         .then(data=>{
-            // console.log("data===",data);
-            res.status(200).json(data);
+           res.status(200).json(data);
         })
         .catch(err =>{
             res.status(500).json({ error: err });
         }); 
 };
 
-exports.getAllDesignations = (req, res, next)=>{
-    DesignationMaster.find({})
+exports.getAllOrgLevel = (req, res, next)=>{
+    OrgLevelMaster.find({})
         .sort({createdAt : -1})
         .exec()
         .then(data=>{
-            res.status(200).json(data);
+            // console.log("getAllOrgLevel=============",data);
+           res.status(200).json(data);
         })
         .catch(err =>{
             res.status(500).json({ error: err });
         }); 
 };
-exports.fetchSingleDesignation = (req, res, next)=>{
-    DesignationMaster.findOne({ _id: req.params.fieldID })
+exports.fetchSingleOrgLevel = (req, res, next)=>{
+    OrgLevelMaster.findOne({ _id: req.params.fieldID })
         .exec()
         .then(data=>{
             res.status(200).json(data);
@@ -116,8 +107,8 @@ exports.fetchSingleDesignation = (req, res, next)=>{
         }); 
 };
 
-exports.searchDesignation = (req, res, next)=>{
-    DesignationMaster.find({ designation: { $regex : req.params.str ,$options: "i" }  })
+exports.searchOrgLevel = (req, res, next)=>{
+    OrgLevelMaster.find({ orgLevel : { $regex : req.params.str ,$options: "i" }  })
         .exec()
         .then(data=>{
             res.status(200).json(data);
@@ -126,17 +117,17 @@ exports.searchDesignation = (req, res, next)=>{
             res.status(500).json({ error: err });
         }); 
 };
-exports.updateDesignation = (req, res, next)=>{
-    DesignationMaster.updateOne(
+exports.updateOrgLevel = (req, res, next)=>{
+    OrgLevelMaster.updateOne(
             { _id:req.body.fieldID },  
             {
-                $set:   {  'designation'       : req.body.fieldValue,"orgLevel":req.body.orgLevel  }
+                $set:   {  'orgLevel'       : req.body.fieldValue  }
             }
         )
         .exec()
         .then(data=>{
             if(data.nModified == 1){
-                DesignationMaster.updateOne(
+                OrgLevelMaster.updateOne(
                 { _id:req.body.fieldID},
                 {
                     $push:  { 'updateLog' : [{  updatedAt      : new Date(),
@@ -157,8 +148,8 @@ exports.updateDesignation = (req, res, next)=>{
             res.status(500).json({ error: err });
         });
 };
-exports.deleteDesignation = (req, res, next)=>{
-    DesignationMaster.deleteOne({_id: req.params.fieldID})
+exports.deleteOrgLevel = (req, res, next)=>{
+    OrgLevelMaster.deleteOne({_id: req.params.fieldID})
         .exec()
         .then(data=>{
             if(data.deletedCount === 1){
@@ -171,44 +162,26 @@ exports.deleteDesignation = (req, res, next)=>{
             res.status(500).json({ error: err });
         });            
 };
-
-
-
-exports.fetch_file = (req,res,next)=>{ 
-
-    DesignationMaster.find( { _id : "fileName"})
-    .exec()
-    .then(data=>{
-        res.status(200).json(data.length);
-        //res.status(200).json(data);
-        })
-    .catch(err =>{
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
-    });   
-};
-exports.fetch_file_count = (req,res,next)=>{
-    //PersonMaster.find({"type" : req.params.type})
-    DesignationMaster.find( { _id : "fileName" } )
-    .exec()
-    .then(data=>{
-        
-        res.status(200).json(data.length);
-    })
-    .catch(err =>{
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
-    }); 
-};
-
-
-var fetchAllDesignation = async (type)=>{
+function insertOrgLevel(orgLevel, createdBy){
     return new Promise(function(resolve,reject){ 
-    DesignationMaster.find({type: type})
+        const departmentMaster = new OrgLevelMaster({
+                        _id                         : new mongoose.Types.ObjectId(),
+                        orgLevel                  : orgLevel,
+                        createdBy                   : createdBy,
+                        createdAt                   : new Date()
+                    })
+                    departmentMaster.save()
+                    .then(data=>{
+                        resolve( data._id );
+                    })
+                    .catch(err =>{
+                        reject(err); 
+                    });
+    });
+}
+var fetchAllOrgLevel = async (type)=>{
+    return new Promise(function(resolve,reject){ 
+    OrgLevelMaster.find()
         .sort({createdAt : -1})
         // .skip(req.body.startRange)
         // .limit(req.body.limitRange)
@@ -304,46 +277,12 @@ var insertFailedRecords = async (invalidData,updateBadData) => {
     })            
 }
 
-function insertDesignation(designation, createdBy){
-    return new Promise(function(resolve,reject){ 
-        const designationMaster = new DesignationMaster({
-                        _id                         : new mongoose.Types.ObjectId(),
-                        designation                 : designation,
-                        createdBy                   : createdBy,
-                        createdAt                   : new Date()
-                    })
-                    designationMaster.save()
-                    .then(data=>{
-                        resolve( data._id );
-                    })
-                    .catch(err =>{
-                        reject(err); 
-                    });
-    });
-}
 
-exports.delete_file = (req,res,next)=>{
-
-    //console.log("type",req.params.type)
-    //console.log("fileName",req.params.fileName)
-    DesignationMaster.deleteMany({"fileName":req.params.fileName, "type" : req.params.type})
-    .exec()
-    .then(data=>{
-        res.status(200).json({
-            "message" : "Records of file "+req.params.fileName+" deleted successfully"
-        });
-    })
-    .catch(err =>{
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
-    });  
-};
-
-exports.bulkUploadDesignation = (req, res, next)=>{
-    var designations = req.body.data;
-    // console.log("designations",designations);
+exports.bulkUploadOrgLevel = (req, res, next)=>{
+     //var departments = [{orgLevel:"mesh"},{orgLevel:"mesh1"},{orgLevel:"mesh2"}];
+    var departments = req.body.data;
+    // console.log("departments",departments);
+    // console.log("req.body.data",req.body.data);
 
     var validData = [];
     var validObjects = [];
@@ -356,40 +295,52 @@ exports.bulkUploadDesignation = (req, res, next)=>{
 
     processData();
     async function processData(){
-         // var alldesignations = await fetchDesignations();
-        for(var k = 0 ; k < designations.length ; k++){
-           if (designations[k].designation == '-') {
-                        remark += "designation not found, " ;  
-                    }
+         // var alldepartments = await fetchOrgLevel();
+        for(var k = 0 ; k < departments.length ; k++){
+            if (departments[k].orgLevel == '-') {
+                remark += "orgLevel not found, " ;  
+            }
+            // console.log("remark",remark)
 
-                      if (remark == '') {
-                          var alldesignations = await fetchAllDesignations(req.body.reqdata);
-                          var designationExists = alldesignations.filter((data)=>{
-                            if (data.designation == designations[k].designation)
-                                 {
-                                return data;
-                            }
-                        })
-                       
-                //  console.log("in else validObjects",designationExists);
-                if (designationExists.length==0) {
-                    validObjects = designations[k];
+              if (remark == '') {
+                // var allOrgLevel = await fetchAllOrgLevel(req.body.reqdata);
+                // console.log("alldepartments",allOrgLevel);
+                 console.log()
+                  var alldepartments = await fetchAllOrgLevel(req.body.reqdata);
+                  var departmentExists = alldepartments.filter((data)=>{
+                    if (data.orgLevel == departments[k].orgLevel)
+                         {
+                        return data;
+                    }
+                })
+               
+                 // console.log("in else validObjects",departmentExists);
+                if (departmentExists.length==0) {
+                    validObjects = departments[k];
+                    // console.log("validObjects",validObjects);
                     validObjects.fileName       = req.body.fileName;
-                     validObjects.companyID       = req.body.companyID;
+                    validObjects.companyID       = req.body.companyID;
                     // validObjects.createdBy      = req.body.reqdata.createdBy;
                     validObjects.createdAt      = new Date();
 
                     validData.push(validObjects); 
 
-                }else{                        
-                        remark += "designation already exists." ; 
-                        invalidObjects = designations[k];
-                        invalidObjects.failedRemark = remark;
-                        invalidData.push(invalidObjects); 
-                    }                      
+                }else{
+                    
+                    remark += "OrgLevel already exists." ; 
+
+                    invalidObjects = departments[k];
+                    // console.log("invalidObjects",invalidObjects);
+
+                    invalidObjects.failedRemark = remark;
+                    invalidData.push(invalidObjects); 
                 }
+ 
+              
+            }
+
         }
-         DesignationMaster.insertMany(validData)
+        OrgLevelMaster.insertMany(validData)
         .then(data=>{
 
         })
@@ -407,20 +358,49 @@ exports.bulkUploadDesignation = (req, res, next)=>{
             "message": "Bulk upload process is completed successfully!",
             "completed": true
         });
-
     }
-};
 
+};
+exports.fetch_file_count = (req,res,next)=>{
+    //PersonMaster.find({"type" : req.params.type})
+    OrgLevelMaster.find( { _id : "fileName" } )
+    .exec()
+    .then(data=>{
+        
+        res.status(200).json(data.length);
+    })
+    .catch(err =>{
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    }); 
+};
+exports.fetch_file = (req,res,next)=>{ 
+    OrgLevelMaster.find( { _id : "fileName"})
+    .exec()
+    .then(data=>{
+        // console.log("orgLevel data",data);
+        res.status(200).json(data.length);
+        //res.status(200).json(data);
+        })
+    .catch(err =>{
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });   
+};
 exports.filedetails = (req,res,next)=>{
     var finaldata = {};
     // console.log(req.params.fileName)
 
-    DesignationMaster.find( { fileName:req.params.fileName  } )
+    OrgLevelMaster.find( { fileName:req.params.fileName  } )
 
     .exec()
     .then(data=>{
         //finaldata.push({goodrecords: data})
-        //  console.log("data===404",data)
+         // console.log("data===404",data)
         finaldata.goodrecords = data;
         FailedRecords.find({fileName:req.params.fileName})  
             .exec()
@@ -438,8 +418,3 @@ exports.filedetails = (req,res,next)=>{
         });
     });
 };
-
-
-
-
-

@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import Policy from './pages/HumanResource/Policy';
 import PolicyView from './pages/HumanResource/PolicyView';
 import ApplicationMangement from './pages/ApplicationManagement/ApplicationManagement';
+import EmployeeChart from './pages/OrgChart/EmployeeChart';
 const Layout = ({ children }) => {
     console.log("children",children);
     const [open,setOpen]=useState(false);
@@ -40,11 +41,11 @@ const Layout = ({ children }) => {
         <>
             <Router>
                 <div className={open ? 'flex-none w-[20%]':'flex-none w-[5%]'}>
-                    <SideBar handleCallback={handleCallback}/>
+                    <SideBar handleCallback={handleCallback} openSidebar={open}/>
                 </div>
-                <div className={open ? 'flex-none w-[80%]':'flex-none w-[95%]'}>
+                <div className={open ? 'flex-none w-[80%] h-full':'flex-none w-[95%] h-full'}>
                     <div >
-                        <HeaderView />
+                        <HeaderView handleCallback={handleCallback}/>
                     </div>
                     <div className='bg-blue-100'>
                         <Routes >
@@ -60,6 +61,7 @@ const Layout = ({ children }) => {
                             <Route path="/profile" element={<Profile />} exact />
                             <Route path="/usermanagement" element={<UserManagement />} exact />
                             <Route path="/masters" element={<Masters />} exact />
+                            <Route path="/orgchart" element={<EmployeeChart />} exact />
                         </Routes>
                     </div>
                 </div>

@@ -10,12 +10,14 @@ import swal from 'sweetalert';
 import { DocumentViewer } from 'react-documents';
 import {useNavigate} from 'react-router-dom';
 import LeaveApplication from './LeaveApplication';
-const TABLE_HEAD = ["SR. No.",  "APLICATION TYPE","APPLICATION"];
+const TABLE_HEAD = ["SR. No.",  "APLICATION FORM",,"CATEGORY","SUMMARY","APPLICATION"];
 const TABLE_BODY = [
-    {"type" : "Leave Application"},
-    {"type" : "Perfomance Appraisal"},
-    {"type" : "Reimbursement Form"},
-    {"type" : "Asset Request Form"},
+    {"type" : "Leave Application","category":"Casual Leave","summary":""},
+    {"type" : "Leave Application","category":"Sick Leave","summary":""},
+    {"type" : "Leave Application","category":"Priviledged Leave","summary":""},
+    {"type" : "Perfomance Appraisal","category":"NA","summary":""},
+    {"type" : "Reimbursement Form","category":"NA","summary":""},
+    {"type" : "Asset Request Form","category":"NA","summary":""},
 ];
 
 function ApplicationMangement() {
@@ -65,7 +67,7 @@ function ApplicationMangement() {
             </thead>
             <tbody>
                 {TABLE_BODY && TABLE_BODY.length>0?
-                TABLE_BODY.map(({ type }, index) => {
+                TABLE_BODY.map(({ type,category,summary }, index) => {
                 const isLast = index === TABLE_BODY.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -95,6 +97,24 @@ function ApplicationMangement() {
                         color="blue-gray"
                         className="font-normal"
                         >
+                        {category}
+                        </Typography>
+                    </td>
+                    <td className={classes}>
+                        <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                        >
+                        {summary}
+                        </Typography>
+                    </td>
+                    <td className={classes}>
+                        <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                        >
                          <Button className="bg-site" onClick={() => {openModal(true);setApplication(type)}}>APPLY</Button>
                         </Typography>
                     </td>
@@ -114,7 +134,7 @@ function ApplicationMangement() {
         <Modal.Header>{application}</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
-              <LeaveApplication />
+              <LeaveApplication onClose={() => openModal(false)} />
           </div>
         </Modal.Body>
       </Modal>

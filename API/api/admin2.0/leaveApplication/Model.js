@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
-const designationSchema = mongoose.Schema({
+const leaveApplicationSchema = mongoose.Schema({
     _id                       : mongoose.Schema.Types.ObjectId,
-    designation               : String,
-    orgLevel                  : String,
-    companyID                 : String,
-    createdBy                 : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    manager_id                : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    leaveType                 : String,
+    leaveSubject              : String,
+    leaveSummary              : String,
     createdAt                 : Date,
-    fileName                  : String,
+    status                    : String,
+    remark                    : String,
     updateLog                 : [
                                 {
                                     updatedAt           : Date,
@@ -16,4 +17,4 @@ const designationSchema = mongoose.Schema({
                                 ]
 });
 
-module.exports = mongoose.model('designationmasters',designationSchema);
+module.exports = mongoose.model('leaveApplication',leaveApplicationSchema);

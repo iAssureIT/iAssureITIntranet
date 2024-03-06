@@ -1,13 +1,10 @@
 const mongoose = require('mongoose');
 
-const designationSchema = mongoose.Schema({
+const orgLevelSchema = mongoose.Schema({
     _id                       : mongoose.Schema.Types.ObjectId,
-    designation               : String,
     orgLevel                  : String,
-    companyID                 : String,
     createdBy                 : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-    createdAt                 : Date,
-    fileName                  : String,
+    createdAt                 : Date,         
     updateLog                 : [
                                 {
                                     updatedAt           : Date,
@@ -16,4 +13,4 @@ const designationSchema = mongoose.Schema({
                                 ]
 });
 
-module.exports = mongoose.model('designationmasters',designationSchema);
+module.exports = mongoose.model('orgLevel',orgLevelSchema);

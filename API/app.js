@@ -85,13 +85,16 @@ const usersRoutes			   			= require("./api/admin2.0/userManagementnew/RoutesUser
 const rolesRoutes			   			= require("./api/admin2.0/rolesManagement/RoutesRoles.js");
 const masternotificationRoutes		    = require('./api/admin2.0/notificationManagement/RoutesMasterNotification.js');
 const notificationRoutes				= require('./api/admin2.0/notificationManagement/RoutesNotification.js');
-const consultantApprovalRoutes          = require('./api/admin2.0/consultantApproval/routes')
+const consultantApprovalRoutes          = require('./api/admin2.0/consultantApproval/routes');
 
-const productController 				= require('./api/admin2.0/products/Routes')
-const orderProductController 			= require('./api/admin2.0/orderProduct/Routes')
-const departmentRoutes                   = require('./api/admin2.0/departmentMaster/RoutesDepartmentMaster.js')
-const designationRoutes                   = require('./api/admin2.0/designationMaster/RoutesDesignationMaster.js')
-const policyController                       = require('./api/admin2.0/policyManagement/routes.js')
+const productController 				= require('./api/admin2.0/products/Routes');
+const orderProductController 			= require('./api/admin2.0/orderProduct/Routes');
+const departmentRoutes                   = require('./api/admin2.0/departmentMaster/RoutesDepartmentMaster.js');
+const designationRoutes                   = require('./api/admin2.0/designationMaster/RoutesDesignationMaster.js');
+const policyController                    = require('./api/admin2.0/policyManagement/routes.js');
+const leaveApplicationRoute 			 = require('./api/admin2.0/leaveApplication/routes.js');
+const leaveMasterRoute 			 		= require('./api/admin2.0/leaveMaster/Routes.js');
+const orgMasterRoute 			 		= require('./api/admin2.0/orgLevelMaster/Routes.js');
 
 app.use("/startup", startupRoutes);	
 app.use("/api/auth", systemRoutes);
@@ -104,6 +107,9 @@ app.use('/api/consultant-approval', 		consultantApprovalRoutes);
 app.use('/api/products',					productController);
 app.use('/api/order-product',				orderProductController);
 app.use('/api/policy',				policyController);
+app.use('/api/leaveApplication',				leaveApplicationRoute);
+app.use('/api/leaveMaster',				leaveMasterRoute);
+app.use('/api/orgLevel',				orgMasterRoute);
 
 
 /*=========== admin2.0 API ===============*/
@@ -198,9 +204,11 @@ app.post('/send-email-ses', async (req, res)=> {
 
 app.post('/send-email', (req, res)=> {
 	console.log("inside app.js req:", req.body);
-
+console.log("globalVariable",globalVariable);
 	let transporter = nodeMailer.createTransport({
 		host: globalVariable.emailHost,
+		service: 'gmail',
+		secure: true,
 		port: globalVariable.emailPort,
 		auth: {
 			user: globalVariable.user,
@@ -210,7 +218,7 @@ app.post('/send-email', (req, res)=> {
 	
 	let mailOptions = {
 		from   : globalVariable.projectName+'<'+globalVariable.user+'>', // sender address
-		to     : req.body.adminEmail, // list of receivers
+		to     : req.body.toEmail, // list of receivers
 		subject: req.body.subject, // Subject line
 		text   : req.body.text, // plain text body
 		html   : req.body.mail // html body
@@ -263,7 +271,12 @@ app.post('/send-email', (req, res)=> {
 				})
 			})
 	}else{
+		console.log("Inside send email");
+		console.log("transporter",transporter);
+		console.log("mailOptions",mailOptions);
 		transporter.sendMail(mailOptions, (error, info) => {
+			console.log("error",error);
+			console.log("info",info);
 			if (error) {			
 				return "Failed";
 			}

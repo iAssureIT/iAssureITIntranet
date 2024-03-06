@@ -9,7 +9,7 @@ import swal from 'sweetalert';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 
-const TABLE_HEAD = ["Designation",  "Action"];
+const TABLE_HEAD = ["Level","Designation",  "Action"];
 
 function AddDesignation() {
     const [open,setOpen] = useState(true);
@@ -17,6 +17,7 @@ function AddDesignation() {
     const [update,setUpdate] = useState(false);
     const [designation,setdesignation] = useState('');
     const [designation_id,setdesignationId] = useState('');
+    const [orgLevelList,setOrgLevelList] = useState([]);
     const {
         register,
         handleSubmit,
@@ -26,7 +27,8 @@ function AddDesignation() {
 
 
     useEffect(() => {
-        getdesignationList()
+        getdesignationList();
+        getOrganisationList();
       },[1]);
 
       const onSubmit = (data) => {
@@ -35,9 +37,10 @@ function AddDesignation() {
         
           if(update){
             var formValues = {
-                fieldValue: data.designation,
-                fieldID :designation_id,
-                updatedBy : user.user_id,
+                fieldValue  : data.designation,
+                orgLevel    : data.orgLevel,
+                fieldID     : designation_id,
+                updatedBy   : user.user_id,
               }
             axios.patch('/api/Designation/patch', formValues)
           .then((response) => {
@@ -65,6 +68,7 @@ function AddDesignation() {
        else{
         var formValues = {
             fieldValue: data.designation,
+            orgLevel    : data.orgLevel,
             user_id: user.user_id,
           }
         axios.post('/api/Designation/post', formValues)
@@ -90,6 +94,25 @@ function AddDesignation() {
         
     };
 
+    const getOrganisationList =()=>{
+      axios.post('/api/orgLevel/get/list')
+      .then((response) => {
+       console.log("response orgLevel",response);
+       var orgLevelList = [];
+       for (let index = 0; index < response.data.length; index++) {
+           let orgLevelData ={
+              orgLevel_id : response.data[index]._id,
+              orgLevel:response.data[index].orgLevel
+           } 
+           orgLevelList.push(orgLevelData);
+       }
+       setOrgLevelList(orgLevelList)
+       console.log("orgLevelList",orgLevelList);
+      })
+      .catch((err)=>console.log("err",err))
+  }
+    
+
     const getdesignationList =()=>{
         axios.post('/api/Designation/get/list')
         .then((response) => {
@@ -98,7 +121,8 @@ function AddDesignation() {
          for (let index = 0; index < response.data.length; index++) {
              let designationData ={
                 designation_id : response.data[index]._id,
-                designation:response.data[index].designation
+                designation:response.data[index].designation,
+                orgLevel:response.data[index].orgLevel
              } 
              designationList.push(designationData);
          }
@@ -134,11 +158,23 @@ function AddDesignation() {
      
       <div className='p-7 text-xl font-semibold'>
         <div className='grid  grid-cols bg-grey-200 mb-8'>
-            <form className='flex grid-cols'  onSubmit={handleSubmit(onSubmit)}>
-                <div class="grid mb-6 md:grid-cols-2">
+            <form className='flex grid-cols gap-12'  onSubmit={handleSubmit(onSubmit)}>
+               <div >
+                  <select id="orgLevel" {...register("orgLevel",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                      <option selected>Select Organization Level</option>
+                      {orgLevelList &&
+                          orgLevelList.map((item,index)=>{
+                              return(
+                                  <option value={item.orgLevel}>{item.orgLevel}</option>
+                              )
+                          })
+                      }
+                  </select>
+              </div> 
+              <div className="grid mb-6 ">
                         <input type="text" id="designation"{...register("designation",{required:true})} value={designation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Add Designation..." required onChange={(e)=>setdesignation(e.value)} />
                </div>
-               <div class="grid mb-6 md:grid-cols-2">
+               <div className="grid mb-6 md:grid-cols-2">
                     <button type="submit" className="text-white bg-site hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{update?"Update":"Submit"}</button>
                  </div>
             </form>
@@ -165,12 +201,21 @@ function AddDesignation() {
                     </tr>
                 </thead>
                 <tbody>
-                    {designationList.map(({ designation }, index) => {
+                    {designationList.map(({ designation,orgLevel }, index) => {
                     const isLast = index === designationList.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                     return (
                         <tr key={designation}>
+                             <td className={classes}>
+                            <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                            >
+                            {orgLevel}
+                            </Typography>
+                        </td>
                         <td className={classes}>
                             <Typography
                             variant="small"
@@ -180,6 +225,7 @@ function AddDesignation() {
                             {designation}
                             </Typography>
                         </td>
+                        
                         <td className={classes}>
                       <Tooltip content="Edit User" >
                         <IconButton variant="text" onClick={()=>editUser(designationList[index])}>

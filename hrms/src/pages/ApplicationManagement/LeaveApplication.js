@@ -9,7 +9,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 function LeaveApplication(props) {
     console.log("props",props);
-    const {policy,getPolicyList,edit,openModal}=props;
+    const {policy,getPolicyList,edit,onClose}=props;
     const [open,setOpen] = useState(true);
     const [user,setUser]=useState();
     const [roleList,setRoleList] = useState([]);
@@ -39,6 +39,7 @@ function LeaveApplication(props) {
                 let userData ={
                     _id  : res.data.data[index]._id,                
                     name : res.data.data[index]?.profile?.fullName,
+                    username : res.data.data[index]?.username
                 } 
                 userList.push(userData);
             }
@@ -50,38 +51,45 @@ function LeaveApplication(props) {
       ]
 
     const onSubmit = (data) => {
-        const formValues = {
-            "leave_type"        : data.leave_type,
-            "leave_type"        : data.leave_type,
-            "policy_summary"    : policy_summary,
-            "createdBy"         : user.user_id
-        }
-        if(edit){
-            formValues.policy_id=policy._id;
-            axios.patch('/api/policy/update-policy',formValues)
-            .then((res) => {
-                console.log("res",res);
-                console.log("formValues",formValues);
-                swal({
-                    text: res.data.message
-                });
-               getPolicyList();
-               openModal(false);
-            })
-            .catch((err)=>console.log("err",err))
-        }else{
-            axios.post('/api/policy/insert-policy',formValues)
-            .then((res) => {
-                console.log("res",res);
-                console.log("formValues",formValues);
-                swal({
-                    text: res.data.message
-                });
-               getPolicyList();
-               openModal(false);
-            })
-            .catch((err)=>console.log("err",err))
-        }
+        console.log("data",data);
+        console.log("policy_summary",policy_summary);
+        const formValues1 = {
+            toEmail: data.reporting_manager.split(' ')[0],
+            // toEmail: 'rushi.salunkhe101@gmail.com',
+            subject: data.leave_subject,
+            text: data.leave_type,
+            mail:policy_summary
+          };
+          console.log("notification", formValues1);
+        //   axios
+        //     .post("/send-email", formValues1)
+        //     .then((res) => {
+        //       console.log("res 117", res);
+        //       if (res.status === 200) {
+                const formValues = {
+                    manager_id: data.reporting_manager.split(' ')[1],
+                    leaveSubject: data.leave_subject,
+                    leaveType: data.leave_type,
+                    leaveSummary:policy_summary
+                  };
+                  console.log("formValues",formValues);
+                    axios.post('/api/leaveApplication/post',formValues)
+                    .then(res=>{
+                        console.log("res",res);
+                        onClose();
+                        swal({
+                            text: res.data.message
+                        });
+
+                    })  
+                    .catch(err=>{
+                        console.log("err",err);
+                    })
+            //   }
+            // })
+            // .catch((error) => {
+            //   console.log("error = ", error);
+            // });
     }   
 
     console.log("managerList",managerList);
@@ -97,13 +105,13 @@ function LeaveApplication(props) {
                             <div className='text-l'>Employee Name : <span  className='text-l'   >{user?.firstName+ " "+user?.lastName}</span></div>
                         </div> 
                     <div >
-                            <label for="leave_type" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Reporting Manager</label>
-                            <select id="leave_type" {...register("leave_type",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <label for="reporting_manager" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Reporting Manager</label>
+                            <select id="reporting_manager" {...register("reporting_manager",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled selected>Select Reporting Manager</option>
                                     {managerList  && managerList.length> 0 &&
                                     managerList.map((item,index)=>{
                                         return(
-                                            <option value={item?._id}>{item?.name}</option>
+                                            <option value={item?.username+" "+item?._id}>{item?.name}</option>
                                         )
                                     })
                                 }
