@@ -148,7 +148,7 @@ console.log("errors",errors);
     <div className="w-full">
       <div className='p-7 text-xl font-semibold'>
       <div className='text-center'>Fill below details</div>
-        {/* <StepperWithContent /> */}
+       {/* <StepperWithContent />  */}
         <div className='grid  grid-cols bg-grey-200 mb-8'>
             
             <span className='text-left'> Employee Details :</span>
