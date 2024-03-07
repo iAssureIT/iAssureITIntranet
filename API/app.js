@@ -92,7 +92,7 @@ const orderProductController 			= require('./api/admin2.0/orderProduct/Routes');
 const departmentRoutes                   = require('./api/admin2.0/departmentMaster/RoutesDepartmentMaster.js');
 const designationRoutes                   = require('./api/admin2.0/designationMaster/RoutesDesignationMaster.js');
 const policyController                    = require('./api/admin2.0/policyManagement/routes.js');
-const leaveApplicationRoute 			 = require('./api/admin2.0/leaveApplication/routes.js');
+const leaveApplicationRoute 			 = require('./api/admin2.0/leaveApplication/Routes.js');
 const leaveMasterRoute 			 		= require('./api/admin2.0/leaveMaster/Routes.js');
 const orgMasterRoute 			 		= require('./api/admin2.0/orgLevelMaster/Routes.js');
 
