@@ -9,6 +9,8 @@ import {useNavigate} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import swal from 'sweetalert';
+import moment from 'moment';
+// import 'moment-timezone';
 
 // import StepperWithContent from "./StepIndicator";
 
@@ -16,6 +18,7 @@ import swal from 'sweetalert';
 
 
 function OnBoardingForm(){
+   
 const navigate = useNavigate();
 const [user,setUser]=useState();
 const [open,setOpen] = useState(true);
@@ -24,7 +27,7 @@ const [middleName,setMiddleName] =useState('');
 const [lastName,setLastName] =useState('');
 const [personal_email,setPersonalEmail] =useState('');
 const [personal_mobile,setContactNo] =useState('');
-const [dob,setDOB] =useState('');
+const [dob,setDOB] =useState(new Date());
 const [maritalStatus,setMaritalStatus] =useState('');
 const [nationality,setNationality] =useState('');
 const [aadharCardNo,setAadharCardNo] =useState('');
@@ -37,6 +40,7 @@ const [pincode,setPincode] =useState('');
 const [alternate_no,setAlternateNo] =useState('');
 const [blood_group,setBloodGroup] =useState('');
 const [person_id,setPersonId] =useState('');
+const [gender,setGender]=useState('');
 
 const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
@@ -50,16 +54,28 @@ const {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     reset,
     formState: { errors },
   } = useForm()
 
+
 useEffect(() => {
   var user =  JSON.parse(localStorage.getItem('userDetails'));
   setUser(user);
+  clearErrors();
   console.log("user",user);
   getEmployeeDetails(user.user_id);
 },[1]);
+
+const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setState((prevProps) => ({
+      ...prevProps,
+      [name]: value
+    }));
+  };
 
 
 const getEmployeeDetails=(user_id)=>{
@@ -71,15 +87,21 @@ const getEmployeeDetails=(user_id)=>{
         setFirstName(res.data.firstName);
         setMiddleName(res.data.middleName)
         setLastName(res.data.lastName);
-        setDOB(res.data.DOB)
+        setDOB(res.data.DOB);
+        setGender(res.data.gender);
         setPersonalEmail(res.data.personalEmail);
         setContactNo(res.data.contactNo);
         setMaritalStatus(res.data.maritalStatus)
         setNationality(res.data.nationality);
-        setAadharCardNo(res.data.adhaarCardNo);
+        setAadharCardNo(res.data.adhaarCardNo &&format(res.data.adhaarCardNo));
         setPanCardNo(res.data.panCardNo);
         setAlternateNo(res.data.altContactNo);
         setBloodGroup(res.data.bloodGroup)
+        setAddressLine1(res.data.correspondenceAddress.addressLine1);
+        setCity(res.data.correspondenceAddress.city);
+        setState(res.data.correspondenceAddress.state);
+        setCountry(res.data.correspondenceAddress.country);
+        setPincode(res.data.correspondenceAddress.pincode);
     }
    
   })
@@ -87,6 +109,12 @@ const getEmployeeDetails=(user_id)=>{
     console.log("err",err);
   })
 }
+
+
+function format(s) {
+    return s.toString().replace(/\d{4}(?=.)/g, '$&-');
+}
+
 
 // const schema = Joi.object({
 //     first_name: Joi.string().required(),
@@ -114,12 +142,12 @@ const getEmployeeDetails=(user_id)=>{
             "middleName": data.middleName,
             "lastName": data.lastName,
             "dob": data.dob, 
-            "gender":data.gender,
+            "gender":gender,
             "maritalStatus":data.maritalStatus,
             "nationality":data.nationality,
             "aadharCardNo": (data.aadhar_card_no).replaceAll('-', ''),
             "panCardNo": data.pan_card_no, 
-            "addressLine1":data.addressLine1,
+            "addressLine":data.addressLine1,
             "city": data.city, 
             "state": data.state, 
             "country":data.country,
@@ -135,29 +163,29 @@ const getEmployeeDetails=(user_id)=>{
         .then((res) => {
             console.log("res",res);
             swal({
-                text: res.data.message
+                text: "Employee Personal Info Updated Successfully"
             });
+            navigate('/academicDetails');
             // navigate to another screen where user able to filled info with unverified status
         })
         .catch((err)=>console.log("err",err)) // on error show error msg and form should be reset
     }   
-console.log("errors",errors);
+
+    const onErrors = errors => console.error(errors);
   return(
     <>
-        
     <div className="w-full">
       <div className='p-7 text-xl font-semibold'>
-      <div className='text-center'>Fill below details</div>
        {/* <StepperWithContent />  */}
         <div className='grid  grid-cols bg-grey-200 mb-8'>
             
             <span className='text-left'> Employee Details :</span>
-                <form className='bg-blue-200 my-6  p-4' onSubmit={handleSubmit(onSubmit)}>
+                <form className='bg-blue-200 my-6  p-4' onSubmit={handleSubmit(onSubmit,onErrors)}>
                     <div className="grid gap-6 md:grid-cols-3 mb-6  rounded">
                         <div>
                             <label for="firstName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name<span className="text-red-500">*</span></label>
-                            <input type="text" id="firstName" value={firstName}  {...register("firstName",{required:true,})} onChange={e=>setFirstName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Firstname" required />
-                            {/* {errors.firstName && <span className="text-sm font-medium text-red-500">First Name is required</span>} */}
+                            <input type="text" id="firstName" value={firstName}  {...register("firstName",{required:"Firstname is required"})} onChange={(e)=>setFirstName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Firstname" required />
+                            {errors.firstName && <span className="text-sm font-medium text-red-500">{errors.firstName.message}</span>}
                         </div>
                         <div>
                             <label for="middleName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name<span className="text-red-500">*</span></label>
@@ -171,35 +199,34 @@ console.log("errors",errors);
                         </div>
                         <div >
                             <label for="dob" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date Of Birth<span className="text-red-500">*</span></label>
-                            <input type="date" id="dob"  value={new Date(dob)   } {...register("dob",{required:true})} onChange={(e)=>setDOB(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                            <input type="date" id="dob"  value={moment(dob).utc().format('YYYY-DD-MM',{required:true})} {...register("dob")} onChange={(e)=>setDOB(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
                             {/* {errors.dob && <span className="text-sm font-medium text-red-500">Select Date Of Birth</span>} */}
                         </div>
                         <div className="mt-4">
                         <span className="text-gray-700">Gender</span>
-                            <div id="gender" {...register("gender", { required: true })}  className="mt-2">
+                            <div id="gender" {...register("gender",{required:true})}  className="mt-2">
                                 <label className="inline-flex items-center">
-                                <input type="radio" className="form-radio" name="male" value="male" />
+                                <input type="radio"  className="form-radio" checked={gender==="Male" ? true :false} name="Male" value="Male"  onChange={(e)=>setGender(e.target.value)} />
                                 <span className="ml-2">Male</span>
                                 </label>
                                 <label className="inline-flex items-center ml-6">
-                                <input type="radio" className="form-radio" name="Female" value="Female" />
+                                <input type="radio" className="form-radio" checked={gender==="Female" ? true :false} name="Female" value="Female"  onChange={(e)=>setGender(e.target.value)}/>
                                 <span className="ml-2">Female</span>
                                 </label>
                             </div>
                         </div> 
                         <div >
                             <label for="maritalStatus" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Marital Status<span className="text-red-500">*</span></label>
-                            <select id="maritalStatus" value={maritalStatus} {...register("maritalStatus", { required: true })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="maritalStatus" value={maritalStatus} {...register("maritalStatus",{required:true})} onChange={(e)=>setMaritalStatus(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" disabled selected>Select Marital Status</option>
                                 <option value="Married">Married</option>
                                 <option value="Single">Single</option>
                                 <option value="Divorce">Divorce</option>
                             </select>
-                            {errors.maritalStatus && <span className="text-sm font-medium text-red-500">Marital Status is required</span>}
                         </div>  
                         <div >
                             <label for="nationality" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Noationality<span className="text-red-500">*</span></label>
-                            <select id="nationality" value={nationality} {...register("nationality", { required: true })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="nationality" value={nationality} {...register("nationality",{required:true})} onChange={(e)=>setNationality(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" disabled selected>Select Nationality</option>
                                 <option value="afghan">Afghan</option>
                                 <option value="albanian">Albanian</option>
@@ -394,61 +421,58 @@ console.log("errors",errors);
                                 <option value="zambian">Zambian</option>
                                 <option value="zimbabwean">Zimbabwean</option>
                             </select>
-                            {errors.nationality && <span className="text-sm font-medium text-red-500">Marital Status is required</span>}
                         </div>  
                         <div >
-                            <label for="aadhar_card_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Aadhar Card Number<span className="text-red-500">*</span></label>
-                            <input type="text" id="aadhar_card_no" value={aadharCardNo} {...register("aadhar_card_no",{required:true, pattern: /^\d{4}-\d{4}-\d{4}$/ })} maxLength={14} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                            {errors.aadhar_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid Aadhar Card Number (XXXX-XXXX-XXXX)</span>}
+                            <label for="aadhar_card_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Aadhar Card Number (XXXX-XXXX-XXXX)<span className="text-red-500">*</span></label>
+                            <input type="text" id="aadhar_card_no" value={aadharCardNo} {...register("aadhar_card_no",{required:true, pattern: /^\d{4}-\d{4}-\d{4}$/ })} onChange={(e)=>setAadharCardNo(e.target.value)} maxLength={14} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            {/* {errors.aadhar_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid Aadhar Card Number (XXXX-XXXX-XXXX)</span>} */}
                         </div> 
                         <div >
-                            <label for="pan_card_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PAN Card Number<span className="text-red-500">*</span></label>
-                            <input type="text" id="pan_card_no" value={pan_card_no} {...register("pan_card_no",{required:true, pattern: /^[A-Z]{5}[0-9]{4}[A-Z]$/ })} maxLength={10} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                            {errors.pan_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid PAN Card Number (ABCDE1234F)</span>}
+                            <label for="pan_card_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PAN Card Number (ABCDE1234F)<span className="text-red-500">*</span></label>
+                            <input type="text" id="pan_card_no" value={pan_card_no} {...register("pan_card_no",{required:true, pattern: /^[A-Z]{5}[0-9]{4}[A-Z]$/ })} onChange={(e)=>setPanCardNo(e.target.value)} maxLength={10} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            {/* {errors.pan_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid PAN Card Number (ABCDE1234F)</span>} */}
                         </div> 
                         </div>
                         <span className='text-left'> Address :</span>
                     <div className="grid gap-6 my-6 md:grid-cols-3   rounded">
                         <div>
                             <label for="addressLine1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current Address<span className="text-red-500">*</span></label>
-                            <textarea type="text" id="addressLine1" value={addressLine1} {...register("addressLine1",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> </textarea>
-                            {errors.addressLine1 && <span className="text-sm font-medium text-red-500">Current Address is required</span>}
+                            <textarea type="text" id="addressLine1" value={addressLine1} {...register("addressLine1",{required:true})} onChange={(e)=>setAddressLine1(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required> </textarea>
                         </div>
                         <div>
                             <label for="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City<span className="text-red-500">*</span></label>
-                            <input type="text" id="city" value={city} {...register("city",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter City" />
-                            {errors.city && <span className="text-sm font-medium text-red-500">City is required</span>}
+                            <input type="text" id="city" value={city} {...register("city",{required:true})} onChange={(e)=>setCity(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter City" required/>
                         </div>
                         <div>
                             <label for="state" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State<span className="text-red-500">*</span></label>
-                            <input type="text" id="state" value={state}  {...register("state",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter State" />
-                            {errors.state && <span className="text-sm font-medium text-red-500">State is required</span>}
+                            <input type="text" id="state" value={state}  {...register("state",{required:true})} onChange={(e)=>setState(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter State" required/>
                         </div>
                         <div>
                             <label for="country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                            <input type="text" id="country" value={country} {...register("country",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Pincode" />
+                            <input type="text" id="country" value={country} {...register("country",{required:true})} onChange={(e)=>setCountry(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Country" required/>
                         </div> 
                         <div>
                             <label for="pincode" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pincode</label>
-                            <input type="text" id="pincode" value={pincode} {...register("pincode",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Pincode" />
+                            <input type="text" id="pincode" value={pincode} {...register("pincode",{required:true})} onChange={(e)=>setPincode(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Pincode"required />
                         </div>
                         </div>
                         <span className='text-left'> Contact Info :</span>
                     <div className="grid gap-6 my-6 md:grid-cols-3 rounded">
                         <div>
                             <label for="personal_email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Personal Email<span className="text-red-500">*</span></label>
-                            <input type="email" id="personal_email" value={personal_email} {...register("personal_email",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Personal Email" />
-                            {errors.personal_email && <span className="text-sm font-medium text-red-500">Please enter valid data</span>}
+                            <input type="email" id="personal_email" value={personal_email} {...register("personal_email",{required:true})} onChange={(e)=>setPersonalEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Personal Email" />
+                            {/* {errors.personal_email && <span className="text-sm font-medium text-red-500">Please enter valid data</span>} */}
                         </div>
                         <div>
                             <label for="personal_mobile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Personal Mobile<span className="text-red-500">*</span></label>
-                            <input type="tel" id="personal_mobile" value={personal_mobile} {...register("personal_mobile",{required:true, pattern: /^\+?\d{10}$/})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Mobile Number" pattern="/^+91(7\d|8\d|9\d)\d{9}$/" />
-                            {errors.personal_mobile && <span className="text-sm font-medium text-red-500">Please enter valid data</span>}
+                            <input type="tel" id="personal_mobile" value={personal_mobile} {...register("personal_mobile",{required:true})} onChange={(e)=>setContactNo(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Mobile Number"  />
+                            {/* {errors.personal_mobile && <span className="text-sm font-medium text-red-500">Please enter valid data</span>} */}
+                            {/* , pattern: /^\+?\d{10}$/ */}
                         </div>
                         <div>
                             <label for="alternate_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alternate Number<span className="text-red-500">*</span></label>
-                            <input type="tel" id="alternate_no" value={alternate_no} {...register("alternate_no",{required:true, pattern: /^\+?\d{10}$/})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Alternate Mobile Number" pattern="/^+91(7\d|8\d|9\d)\d{9}$/" />
-                            {errors.alternate_no && <span className="text-sm font-medium text-red-500">Please enter valid data</span>}
+                            <input type="tel" id="alternate_no" value={alternate_no} {...register("alternate_no",{required:true,pattern: /^\+?\d{10}$/})} onChange={(e)=>setAlternateNo(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Alternate Mobile Number"  />
+                            {/* {errors.alternate_no && <span className="text-sm font-medium text-red-500">Please enter valid data</span>} */}
                         </div>
                       
                        
@@ -459,7 +483,7 @@ console.log("errors",errors);
                         </div>  */}
                         <div >
                             <label for="blood_group" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Blood Group<span className="text-red-500">*</span></label>
-                            <select id="blood_group" value={blood_group} {...register("blood_group", { required: true })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="blood_group" value={blood_group} {...register("blood_group",{required:true})} onChange={(e)=>setBloodGroup(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" disabled selected>Select Blood Group</option>
                                 <option value="A+">A+</option>
                                 <option value="A-">A-</option>
@@ -470,11 +494,10 @@ console.log("errors",errors);
                                 <option value="O+">O+</option>
                                 <option value="O-">O-</option>
                             </select>
-                            {errors.blood_group && <span className="text-sm font-medium text-red-500">Blood Group is required</span>}
                         </div>  
                     </div>
                     <div className="flex justify-end">
-                        <button type="submit" className="text-white bg-blue-700  mr-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>
+                        <button type="submit"  className="text-white bg-blue-700  mr-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                         <button type="button" onClick={() => reset()} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Reset</button>
                         
                     </div>

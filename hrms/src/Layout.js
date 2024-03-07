@@ -9,13 +9,14 @@ import Profile from './pages/Profile/Profile';
 import Login from './pages/Login/Login';
 import Masters from './pages/Masters/Masters';
 import UserManagement from './pages/UserManagement/UserManagement';
-import OnBoardingForm from './pages/OnBoardingForm/OnBoardingForm';
+import OnBoardingForm from './pages/OnBoardingForm/BasicInfo';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Policy from './pages/HumanResource/Policy';
 import PolicyView from './pages/HumanResource/PolicyView';
 import ApplicationMangement from './pages/ApplicationManagement/ApplicationManagement';
 import EmployeeChart from './pages/OrgChart/EmployeeChart';
+import AcademicDetails from './pages/OnBoardingForm/AcademicDetails';
 const Layout = ({ children }) => {
     console.log("children",children);
     const [open,setOpen]=useState(false);
@@ -80,6 +81,7 @@ const Layout = ({ children }) => {
                                 <div >
                                     <Routes >
                                         <Route path="/onBoardingForm" element={<OnBoardingForm/>} exact />
+                                        <Route path="/academicDetails" element={<AcademicDetails/>} exact />
                                         <Route path="/" element={<OnBoardingForm/>} exact />
                                     </Routes>
                                 </div>

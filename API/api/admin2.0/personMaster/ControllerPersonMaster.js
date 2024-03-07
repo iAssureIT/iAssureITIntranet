@@ -229,14 +229,14 @@ exports.updatePerson = (req, res, next) => {
                 'lastName': req.body.lastName,
                 'DOB': req.body.dob,
                 'gender': req.body.gender,
-                "maritalStatus":req.body.materialStatus,
+                "maritalStatus":req.body.maritalStatus,
                 "nationality" : req.body.nationality,
                 "adhaarCardNo":req.body.aadharCardNo,
                 'contactNo': req.body.personalMobileNo,
                 'altContactNo': req.body.alternateMobileNo,
                 'personalEmail' : req.body.personalEmail,
                 "panCardNo":req.body.panCardNo,
-                'address'                     : {
+                'correspondenceAddress'                     : {
                     addressLine1    : req.body.addressLine,
                     city            : req.body.city,
                     state           : req.body.state,
