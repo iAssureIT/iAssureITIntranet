@@ -6,6 +6,7 @@ import StatBox from '../../components/StatBox/StatBox';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
+
 function AddEmployee(props) {
     console.log("props",props);
     const [open,setOpen] = useState(true);
@@ -18,15 +19,15 @@ function AddEmployee(props) {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
       } = useForm()
 
     useEffect(() => {
         var user =  JSON.parse(localStorage.getItem('userDetails'));
-  setUser(user);
+        setUser(user);
         getRoleList();
         getDepartmentList();
-        getDesignationList();
         getManagerList();
       },[1]);
 
@@ -87,15 +88,18 @@ function AddEmployee(props) {
         .catch((err)=>console.log("err",err))
     }
 
-    const getDesignationList =()=>{
-        axios.post('/api/designation/get/list')
+    const getDesignationList =(value)=>{
+        console.log("value==>",value);
+        axios.post('/api/designation/get/list/',{department:value})
         .then((response) => {
          console.log("response role",response);
          var designationList = [];
          for (let index = 0; index < response.data.length; index++) {
              let data ={
                 designation_id : response.data[index]._id,
-                designation:response.data[index].designation
+                designation:response.data[index].designation,
+                orgLevel:response.data[index].orgLevel,
+                department:response.data[index].department
              } 
              designationList.push(data);
          }
@@ -114,9 +118,10 @@ function AddEmployee(props) {
             "username":"EMAIL",
             "userName":data.email,
             "mobNumber": (data.phone).replace("-", ""),
-            "pwd": "Welcome@123",
+            "pwd": "iAssureIT@123",
             "department" :data.department,
-            "designation" :data.designation,
+            "designation" :data.designation.split("-")[0],
+            "orgLevel" : data.designation.split("-")[1],
             "role" :  [data.role],
             "companyID": 1,
             "status": "active",
@@ -128,7 +133,7 @@ function AddEmployee(props) {
             console.log("res",res);
             formValues.userId = res.data.ID;
             console.log("formValues",formValues);
-           addEmployee(formValues);
+            addEmployee(formValues);
             swal({
                 text: res.data.message
             });
@@ -140,6 +145,7 @@ function AddEmployee(props) {
     const addEmployee=(data)=>{
         axios.post('/api/personmaster/post',data)
         .then((res) => {
+            reset();
             console.log("res",res);
         })
         .catch((err)=>console.log("err",err))
@@ -147,7 +153,7 @@ function AddEmployee(props) {
 
     return (
     <div className="w-full  ">
-      
+
      
       <div className='p-7 text-xl font-semibold'>
         <div className='grid  grid-cols bg-grey-200 mb-8'>
@@ -171,7 +177,7 @@ function AddEmployee(props) {
                             <input type="email" id="email" {...register("email",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Email..." required />
                         </div> 
                         <div >
-                            <label for="role" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                            <label for="role" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Role</label>
                             <select id="role" {...register("role",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>Select Role</option>
                                 {roleList &&
@@ -184,8 +190,8 @@ function AddEmployee(props) {
                             </select>
                         </div> 
                         <div >
-                            <label for="department" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-                            <select id="department" {...register("department",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <label for="department" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Department</label>
+                            <select id="department" {...register("department",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e)=>{getDesignationList(e.target.value)}}>
                                 <option selected>Select Department</option>
                                 {departmentList &&
                                     departmentList.map((item,index)=>{
@@ -197,13 +203,13 @@ function AddEmployee(props) {
                             </select>
                         </div> 
                         <div >
-                            <label for="designation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                            <label for="designation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Designation</label>
                             <select id="designation" {...register("designation",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>Select Designation</option>
                                 {designationList &&
                                     designationList.map((item,index)=>{
                                         return(
-                                            <option value={item.role}>{item.designation}</option>
+                                            <option value={item.designation+"-"+item.orgLevel}>{item.designation}</option>
                                         )
                                     })
                                 }
@@ -212,7 +218,7 @@ function AddEmployee(props) {
                         <div >
                             <label for="reporting_manager" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Reporting Manager</label>
                             <select id="reporting_manager" {...register("reporting_manager",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option disabled selected>Select Reporting Manager</option>
+                                <option  selected>Select Reporting Manager</option>
                                     {managerList  && managerList.length> 0 &&
                                     managerList.map((item,index)=>{
                                         return(

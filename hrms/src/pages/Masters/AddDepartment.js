@@ -165,7 +165,8 @@ function AddDepartment() {
                     </tr>
                 </thead>
                 <tbody>
-                    {departmentList.map(({ department }, index) => {
+                    {departmentList && departmentList.length >0?
+                    departmentList.map(({ department }, index) => {
                     const isLast = index === departmentList.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -193,8 +194,20 @@ function AddDepartment() {
                       </Tooltip>
                     </td>
                         </tr>
-                    );
-                    })}
+                    )})
+                     :
+                    <tr >
+                        <td colSpan={2} >
+                        <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal text-center p-2"
+                            >
+                            NO DEPARTMENT FOUND
+                            </Typography>
+                        </td>
+                        </tr>
+                        }
                 </tbody>
                 </table>
             </Card>

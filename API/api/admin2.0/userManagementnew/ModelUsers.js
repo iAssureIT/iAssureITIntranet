@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema({
   username: { type: String },
   authService: String,
   social_media_id: String,
+  department : String,
+  orgLevel   : String,
+  designation: String,
+  reporting_id : { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   profile: {
     company_id: { type: mongoose.Schema.Types.ObjectId, ref: "enterprise" },
     companyID: Number,
@@ -48,23 +52,7 @@ const userSchema = mongoose.Schema({
     entLinkedinProfile: Object,
     userBusinessInfo: Object,
   },
-  subscriptionDetails: {
-    planName: String,
-    planCost: Number,
-    planType: String,
-    gstRate: Number,
-    gstAmount: Number,
-    amountPayable: Number,
-    startDate: Date,
-    startDateISO: String,
-    endDate: Date,
-    endDateISO: String,
-    planStatus: String,
-    order_id: { type: mongoose.Schema.Types.ObjectId, ref: "orders" },
-    status: String,
-    planHistory: Array,
-    futurePlans: Array,
-  },
+
   address: {
     addressLine: String,
     city: String,
@@ -72,69 +60,9 @@ const userSchema = mongoose.Schema({
     country: String,
     pincode: String,
   },
-  otherInfo: {
-    fees: Number,
-    experience: String,
-    panNumber: String,
-    qualification: String,
-    languages: Array,
-    awards: String,
-    membership: String,
-    pastWorkExp: String,
-    aboutMyself: String,
-  },
-  documents: {
-    profilePhoto: Array,
-    panCard: Array,
-    educationalQual: Array,
-  },
-  catg_subCatg_expertise: Array,
-  myConsultants: Array,
-  myEnterprises: Array,
   roles: [String],
-  recieveNotifications: Boolean,
-  joinAsConsultant: Boolean,
-  invitedConsultant: Boolean,
-  isProfileReady: Boolean,
   approvalStatus: {type:String,default:'Pending'},
-  approvalLog: [
-    {
-      status: String,
-      updatedAt: Date,
-      updatedBy: String,
-      reason: String,
-    },
-    
-  ],
-  statuslog : [{
-    status: String,
-    updatedAt : Date,
-    updatedBy : String,
-    reason: String,
-  },
-  ],
-  subcatgApprovalLog: [
-    {
-      subCategory       : String,
-      mainCategory_id   : String,
-      mainCategory      : String,
-      userActionDate    : Date,
-      status            : String,
-      adminActionDate   : Date,
-      remark            : String,
-    }
-  ],
-  expertiseApprovalLog: [
-    {
-      expertise         : String,
-      mainCategory_id   : String,
-      mainCategory      : String,
-      userActionDate    : Date,
-      status            : String,
-      adminActionDate   : Date,
-      remark            : String,
-    },
-  ]
+
 });
 
 module.exports = mongoose.model("user", userSchema);

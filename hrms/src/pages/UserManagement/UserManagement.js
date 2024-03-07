@@ -28,7 +28,7 @@ function UserManagement() {
         var user =  JSON.parse(localStorage.getItem('userDetails'));
         // setUser(user);
         getUserList()
-      },[1]);
+      },[]);
 
       const getUserList=()=>{
         var formValues ={
@@ -40,7 +40,7 @@ function UserManagement() {
        .then((response) => {
         console.log("response",response);
         var userList = [];
-        for (let index = 0; index < response.data.length; index++) {
+        for (var index = 0; index < response.data.length; index++) {
             let userData ={
                 _id  : response.data[index]._id,                
                 name : response.data[index].fullName,
@@ -52,7 +52,7 @@ function UserManagement() {
             } 
             userList.push(userData);
         }
-        setUserList(userList)
+          setUserList(userList)
         console.log("userList",userList);
        })
        .catch((err)=>console.log("err",err))
@@ -61,7 +61,7 @@ function UserManagement() {
       const editUser=(data)=>{
         // console.log("department",data);
         // setUpdate(true);
-        setEditUserId()
+        setEditUserId();
         // setdepartment(data.department) ;
         // setdepartmentId(data.department_id)
     }
@@ -121,12 +121,14 @@ function UserManagement() {
                     </tr>
                 </thead>
                 <tbody>
-                    {userList.map(({ _id,name, email, mobile,role,status,lastloggedin }, index) => {
+                    {userList && userList.length > 0 &&
+                    userList.map(({ _id,name, email, mobile,role,status,lastloggedin }, index) => {
+                      console.log("inside render");
                     const isLast = index === userList.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                     return (
-                        <tr key={name}>
+                        <tr key={index}>
                         <td className={classes}>
                             <Typography
                             variant="small"

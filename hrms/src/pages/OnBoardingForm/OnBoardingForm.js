@@ -1,3 +1,4 @@
+import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faGlobe,faUserShield,faUser, faBell,faSignOut} from '@fortawesome/free-solid-svg-icons';
 import { useState,useEffect } from 'react';
@@ -8,6 +9,9 @@ import {useNavigate} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import swal from 'sweetalert';
+
+// import StepperWithContent from "./StepIndicator";
+
 // import Joi from 'joi';
 
 
@@ -33,6 +37,14 @@ const [pincode,setPincode] =useState('');
 const [alternate_no,setAlternateNo] =useState('');
 const [blood_group,setBloodGroup] =useState('');
 const [person_id,setPersonId] =useState('');
+
+const [activeStep, setActiveStep] = React.useState(0);
+  const [isLastStep, setIsLastStep] = React.useState(false);
+  const [isFirstStep, setIsFirstStep] = React.useState(false);
+ 
+  const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
+  const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
+ 
 
 const {
     register,
@@ -136,7 +148,9 @@ console.log("errors",errors);
     <div className="w-full">
       <div className='p-7 text-xl font-semibold'>
       <div className='text-center'>Fill below details</div>
+        {/* <StepperWithContent /> */}
         <div className='grid  grid-cols bg-grey-200 mb-8'>
+            
             <span className='text-left'> Employee Details :</span>
                 <form className='bg-blue-200 my-6  p-4' onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid gap-6 md:grid-cols-3 mb-6  rounded">

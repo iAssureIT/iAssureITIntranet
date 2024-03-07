@@ -4,6 +4,7 @@ const designationSchema = mongoose.Schema({
     _id                       : mongoose.Schema.Types.ObjectId,
     designation               : String,
     orgLevel                  : String,
+    department                : String,
     companyID                 : String,
     createdBy                 : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     createdAt                 : Date,

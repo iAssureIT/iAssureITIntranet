@@ -15,13 +15,7 @@ const TABLE_HEAD = ["Name", "Email", "Mobile Number","Role","Status", "Action"];
 
 
 function DeletedUsers(props) {
-    const [open,setOpen] = useState(true);
-    const [roleList,setRoleList] = useState([]);
-    const [update,setUpdate] = useState(false);
-    const [role,setRole] = useState('');
-    const [role_id,setRoleId] = useState('');
     const [userList,setUserList] = useState([]);
-    const [deleteUserModal,setDeleteUserModal]=useState(false) ;
     const [userId,setUserId]=useState('');
     const [deleteModal,setDeleteModal]=useState(false) ;
     const [restoreModal,setRestoreModal]=useState(false) ;
@@ -37,12 +31,15 @@ function DeletedUsers(props) {
 
     useEffect(() => {
         getDeletedUserList()
-      },[1]);
+      },[]);
 
      
 
     const getDeletedUserList =()=>{
-        axios.post('/api/users/post/deleteduser/list',{companyID:1})
+      var formValues ={
+        companyID:1
+      }
+        axios.post('/api/users/post/deleteduser/list',formValues)
         .then((response) => {
             console.log("response",response);
             var userList = [];
@@ -65,11 +62,11 @@ function DeletedUsers(props) {
     }
 
   
-    const deleteUser=(data)=>{
+    const deleteUser=()=>{
         setDeleteModal(false);
         axios.delete('/api/users/delete/'+userId)
         .then((response) => {
-         console.log("response department",response);
+         console.log("response ",response);
             swal({
             text: "User Deleted Successfully."
             });
@@ -78,11 +75,11 @@ function DeletedUsers(props) {
         .catch((err)=>console.log("err",err))
     }
 
-    const restoreUser=(data)=>{
+    const restoreUser=()=>{
         setRestoreModal(false);
         axios.patch('/api/users/patch/restorestatus',{user_id_toberecover:userId})
         .then((response) => {
-         console.log("response department",response);
+         console.log("response",response);
             swal({
                 text: "User Restored Successfully."
             });
@@ -92,7 +89,6 @@ function DeletedUsers(props) {
         .catch((err)=>console.log("err",err))
     }
 
-    console.log("userList",userList);
 
   return (
     <div className="w-full  ">
@@ -118,13 +114,13 @@ function DeletedUsers(props) {
                 </thead>
                 <tbody>
                 {
-
+                    userList && userList.length>0?
                     userList.map(({ _id,name, email, mobile,role,status }, index) => {
                     const isLast = index === userList.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+                    console.log("userList1",userList)
                     return (
-                    userList && userList.length>0?
-                        <tr key={name}>
+                        <tr key={index}>
                         <td className={classes}>
                             <Typography
                             variant="small"
@@ -173,7 +169,7 @@ function DeletedUsers(props) {
                         <td className={classes}>
                             <div className='flex gap-6'>
                                 <Button className="bg-site" onClick={()=>{setRestoreModal(true);setUserId(_id)}}>Restore User</Button>
-                                <Button className="bg-red-500" onClick={()=>{setRestoreModal(true);setUserId(_id)}} >Delete User</Button>
+                                <Button className="bg-red-500" onClick={()=>{setDeleteModal(true);setUserId(_id)}} >Delete User</Button>
                             </div>
                         {/* <Tooltip content="">
                           <IconButton variant="text"  onClick={()=>{setDeleteModal(true);setDeleteUserId(_id)}}>
@@ -182,21 +178,24 @@ function DeletedUsers(props) {
                         </Tooltip> */}
                         </td>
                         </tr>
-                        :
-                        <tr key={name}>
-                        <td className={classes}>
+                        
+          
+                        
+                    );
+                    
+                    })
+                    :
+                    <tr >
+                        <td colSpan={6} >
                         <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-normal text-center p-2"
                             >
-                            NO DELETED USERS
+                            NO DELETED USERS FOUND
                             </Typography>
                         </td>
                         </tr>
-                    );
-                    })
-               
                 }
                 </tbody>
                 </table>

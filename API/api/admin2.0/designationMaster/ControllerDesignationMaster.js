@@ -24,6 +24,7 @@ exports.insertDesignation = (req,res,next)=>{
                             companyID                   : req.body.companyID,
                             designation                 : req.body.fieldValue,
                             orgLevel                    : req.body.orgLevel,
+                            department                  : req.body.department,
                             createdBy                   : req.body.createdBy,
                             createdAt                   : new Date()
                         })
@@ -80,7 +81,7 @@ exports.countDesignations = (req, res, next)=>{
         }); 
 };
 exports.fetchDesignations = (req, res, next)=>{
-    DesignationMaster.find({})
+    DesignationMaster.find({department:req.body.department})
         .sort({createdAt : -1})
         .skip(req.body.startRange)
         .limit(req.body.limitRange)
@@ -130,7 +131,7 @@ exports.updateDesignation = (req, res, next)=>{
     DesignationMaster.updateOne(
             { _id:req.body.fieldID },  
             {
-                $set:   {  'designation'       : req.body.fieldValue,"orgLevel":req.body.orgLevel  }
+                $set:   {  'designation'       : req.body.fieldValue,"orgLevel":req.body.orgLevel,"department":req.body.department  }
             }
         )
         .exec()

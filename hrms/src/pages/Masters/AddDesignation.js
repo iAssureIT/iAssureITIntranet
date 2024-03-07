@@ -9,7 +9,7 @@ import swal from 'sweetalert';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 
-const TABLE_HEAD = ["Level","Designation",  "Action"];
+const TABLE_HEAD = ["Level","Department","Designation",  "Action"];
 
 function AddDesignation() {
     const [open,setOpen] = useState(true);
@@ -18,6 +18,8 @@ function AddDesignation() {
     const [designation,setdesignation] = useState('');
     const [designation_id,setdesignationId] = useState('');
     const [orgLevelList,setOrgLevelList] = useState([]);
+    const [departmentList,setDepartmentList] = useState([]);
+
     const {
         register,
         handleSubmit,
@@ -29,6 +31,7 @@ function AddDesignation() {
     useEffect(() => {
         getdesignationList();
         getOrganisationList();
+        getDepartmentList();
       },[1]);
 
       const onSubmit = (data) => {
@@ -39,6 +42,7 @@ function AddDesignation() {
             var formValues = {
                 fieldValue  : data.designation,
                 orgLevel    : data.orgLevel,
+                department  : data.department,
                 fieldID     : designation_id,
                 updatedBy   : user.user_id,
               }
@@ -69,6 +73,7 @@ function AddDesignation() {
         var formValues = {
             fieldValue: data.designation,
             orgLevel    : data.orgLevel,
+            department  : data.department,
             user_id: user.user_id,
           }
         axios.post('/api/Designation/post', formValues)
@@ -122,6 +127,7 @@ function AddDesignation() {
              let designationData ={
                 designation_id : response.data[index]._id,
                 designation:response.data[index].designation,
+                department:response.data[index].department,
                 orgLevel:response.data[index].orgLevel
              } 
              designationList.push(designationData);
@@ -131,6 +137,23 @@ function AddDesignation() {
         })
         .catch((err)=>console.log("err",err))
     }
+
+    const getDepartmentList =()=>{
+      axios.post('/api/department/get/list')
+      .then((response) => {
+       console.log("response role",response);
+       var departmentList = [];
+       for (let index = 0; index < response.data.length; index++) {
+           let data ={
+              department_id : response.data[index]._id,
+              department:response.data[index].department
+           } 
+           departmentList.push(data);
+       }
+       setDepartmentList(departmentList)
+      })
+      .catch((err)=>console.log("err",err))
+  }
 
     const editUser=(data)=>{
         console.log("designation",data);
@@ -171,6 +194,18 @@ function AddDesignation() {
                       }
                   </select>
               </div> 
+              <div >
+                            <select id="department" {...register("department",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Select Department</option>
+                                {departmentList &&
+                                    departmentList.map((item,index)=>{
+                                        return(
+                                            <option value={item.department}>{item.department}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div> 
               <div className="grid mb-6 ">
                         <input type="text" id="designation"{...register("designation",{required:true})} value={designation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Add Designation..." required onChange={(e)=>setdesignation(e.value)} />
                </div>
@@ -201,7 +236,8 @@ function AddDesignation() {
                     </tr>
                 </thead>
                 <tbody>
-                    {designationList.map(({ designation,orgLevel }, index) => {
+                    {designationList && designationList.length >0?
+                    designationList.map(({ designation,orgLevel,department }, index) => {
                     const isLast = index === designationList.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -214,6 +250,15 @@ function AddDesignation() {
                             className="font-normal"
                             >
                             {orgLevel}
+                            </Typography>
+                        </td>
+                        <td className={classes}>
+                            <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                            >
+                            {department}
                             </Typography>
                         </td>
                         <td className={classes}>
@@ -239,8 +284,21 @@ function AddDesignation() {
                       </Tooltip>
                     </td>
                         </tr>
-                    );
-                    })}
+                   
+                    )})
+                    :
+                    <tr >
+                        <td colSpan={4} >
+                        <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal text-center p-2"
+                            >
+                            NO DESIGNATION FOUND
+                            </Typography>
+                        </td>
+                        </tr>
+                        }
                 </tbody>
                 </table>
             </Card>

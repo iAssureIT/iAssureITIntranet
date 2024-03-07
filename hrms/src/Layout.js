@@ -40,10 +40,10 @@ const Layout = ({ children }) => {
     return (
         <>
             <Router>
-                <div className={open ? 'flex-none w-[20%]':'flex-none w-[5%]'}>
+                <div className={open ? 'flex-none w-[20%] h-screen':'flex-none w-[5%] h-screen'}>
                     <SideBar handleCallback={handleCallback} openSidebar={open}/>
                 </div>
-                <div className={open ? 'flex-none w-[80%] h-full':'flex-none w-[95%] h-full'}>
+                <div className={open ? 'flex-none w-[80%] h-screen':'flex-none w-[95%] h-screen'}>
                     <div >
                         <HeaderView handleCallback={handleCallback}/>
                     </div>
@@ -74,7 +74,7 @@ const Layout = ({ children }) => {
                  <Router>
                     <div className={'flex-none w-[100%]'}>
                         <div >
-                            <HeaderView />
+                            <HeaderView handleCallback={handleCallback}/>
                         </div>
                             <div className='flex-none w-full'>
                                 <div >

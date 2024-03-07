@@ -1315,7 +1315,7 @@ exports.post_list_deleted_users = async (req, res, next) => {
       .exec();
 
     if (!data || data.length === 0) {
-      return res.status(404).json({ message: "USER_NOT_FOUND" });
+      return res.status(200).json({ message: "USER_NOT_FOUND" });
     }
 
     const returnData = data.map((user) => {
@@ -1442,7 +1442,7 @@ exports.post_list_users = (req, res, next) => {
       .exec()
       .then((data) => {
         if (data) {
-          //console.log("--------------data----------",data);
+          console.log("--------------data----------",data);
           var i = 0;
           var returnData = [];
           for (i = 0; i < data.length; i++) {
@@ -1482,7 +1482,7 @@ exports.post_list_users = (req, res, next) => {
             });
           }
           if (i >= data.length) {
-            // console.log('returnData=============>',returnData);
+            console.log('returnData=============>',returnData);
             res.status(200).json(returnData);
           }
         } else {

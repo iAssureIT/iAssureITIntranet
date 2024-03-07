@@ -72,6 +72,9 @@ exports.user_signup_user = (req, res, next) => {
 													},
 													username: emailId.toLowerCase(),
 													authService : req.body.authService,
+													department: req.body.department,
+													designation: req.body.designation,
+													orgLevel : req.body.orgLevel,
 													profile: {
 														employeeID : nextEmployeeID,
 														firstname: req.body.firstname,
@@ -211,6 +214,9 @@ exports.user_signup_user = (req, res, next) => {
 													},
 													username: req.body.mobNumber,
 													authService : req.body.authService,
+													department: req.body.department,
+													designation: req.body.designation,
+													orgLevel : req.body.orgLevel,
 													profile:
 													{
 														employeeID : nextEmployeeID,

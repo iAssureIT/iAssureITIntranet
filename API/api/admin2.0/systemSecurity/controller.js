@@ -2236,6 +2236,9 @@ exports.user_signup_user = (req, res, next) => {
                             },
                             username: emailId.toLowerCase(),
                             authService: req.body.authService,
+                            department: req.body.department,
+                            designation: req.body.designation,
+                            orgLevel : req.body.orgLevel,
                             profile: {
                               employeeID: nextEmployeeID,
                               firstname: req.body.firstname,
@@ -2248,8 +2251,7 @@ exports.user_signup_user = (req, res, next) => {
                               company_id: req.body.company_ID,
                               pincode: req.body.pincode,
                               companyName: req.body.companyName,
-                              department: req.body.department,
-                              designation: req.body.designation,
+                             
                               city: req.body.cityName,
                               states: req.body.states,
                               status: req.body.status
@@ -2388,6 +2390,9 @@ exports.user_signup_user = (req, res, next) => {
                             },
                             username: req.body.mobNumber,
                             authService: req.body.authService,
+                            department: req.body.department,
+                            designation: req.body.designation,
+                            orgLevel : req.body.orgLevel,
                             profile: {
                               employeeID: nextEmployeeID,
                               firstname: req.body.firstname,
