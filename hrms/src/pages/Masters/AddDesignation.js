@@ -119,7 +119,7 @@ function AddDesignation() {
     
 
     const getdesignationList =()=>{
-        axios.post('/api/Designation/get/list')
+        axios.get('/api/Designation/get/list')
         .then((response) => {
          console.log("response designation",response);
          var designationList = [];
