@@ -17,6 +17,8 @@ import PolicyView from './pages/HumanResource/PolicyView';
 import ApplicationMangement from './pages/ApplicationManagement/ApplicationManagement';
 import EmployeeChart from './pages/OrgChart/EmployeeChart';
 import AcademicDetails from './pages/OnBoardingForm/AcademicDetails';
+import PendingRequest from './pages/ApplicationManagement/PendingRequest';
+
 const Layout = ({ children }) => {
     console.log("children",children);
     const [open,setOpen]=useState(false);
@@ -63,6 +65,7 @@ const Layout = ({ children }) => {
                             <Route path="/usermanagement" element={<UserManagement />} exact />
                             <Route path="/masters" element={<Masters />} exact />
                             <Route path="/orgchart" element={<EmployeeChart />} exact />
+                            <Route path="/pendingrequest" element={<PendingRequest />} exact />
                         </Routes>
                     </div>
                 </div>
