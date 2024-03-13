@@ -195,17 +195,17 @@ function AddDesignation() {
                   </select>
               </div> 
               <div >
-                            <select id="department" {...register("department",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>Select Department</option>
-                                {departmentList &&
-                                    departmentList.map((item,index)=>{
-                                        return(
-                                            <option value={item.department}>{item.department}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-                        </div> 
+                  <select id="department" {...register("department",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                      <option selected>Select Department</option>
+                      {departmentList &&
+                          departmentList.map((item,index)=>{
+                              return(
+                                  <option value={item.department}>{item.department}</option>
+                              )
+                          })
+                      }
+                  </select>
+              </div> 
               <div className="grid mb-6 ">
                         <input type="text" id="designation"{...register("designation",{required:true})} value={designation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Add Designation..." required onChange={(e)=>setdesignation(e.value)} />
                </div>

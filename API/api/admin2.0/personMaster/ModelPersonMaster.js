@@ -48,8 +48,8 @@ const personMasterSchema = mongoose.Schema({
                                             collegeName       : String,
                                             universityName    : String,
                                             specialization    : String,
-                                            passingYear       : Number,
-                                            percentage        : Number
+                                            passingYear       : Date,
+                                            percentage        : String
     }],
 
     workExperience              : String,
@@ -62,12 +62,12 @@ const personMasterSchema = mongoose.Schema({
                                         reportingManager   : String
                                     }], 
     skills             : Array,                                           
-    cerification        : [{
-                                     certificationName: String,
-                                     issuedBy : String,
-                                     certifiedOn : String,
-                                     ValidTill : Date,
-                                     percentageGrade : String
+    certification        : [{
+                                     certificationName  : String,
+                                     issuedBy           : String,
+                                     certifiedOn        : Date,
+                                     ValidTill          : Date,
+                                     percentageGrade    : String
     }],    
     bankDetails        : [{
                                      accountHolderName : String,

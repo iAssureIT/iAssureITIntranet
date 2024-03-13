@@ -10,3 +10,8 @@
     list-style-type: none;
    }
 
+  .optgroup {
+    background-color: gray;
+    color: red;
+}
+

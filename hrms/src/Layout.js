@@ -17,8 +17,13 @@ import PolicyView from './pages/HumanResource/PolicyView';
 import ApplicationMangement from './pages/ApplicationManagement/ApplicationManagement';
 import EmployeeChart from './pages/OrgChart/EmployeeChart';
 import AcademicDetails from './pages/OnBoardingForm/AcademicDetails';
+<<<<<<< Updated upstream
 import PendingRequest from './pages/ApplicationManagement/PendingRequest';
 
+=======
+import WorkExperience from './pages/OnBoardingForm/WorkExperience';
+import SkillsAndCert from './pages/OnBoardingForm/SkillsAndCert';
+>>>>>>> Stashed changes
 const Layout = ({ children }) => {
     console.log("children",children);
     const [open,setOpen]=useState(false);
@@ -80,11 +85,13 @@ const Layout = ({ children }) => {
                         <div >
                             <HeaderView handleCallback={handleCallback}/>
                         </div>
-                            <div className='flex-none w-full'>
+                            <div className='flex-none bg-blue-200 w-full'>
                                 <div >
                                     <Routes >
                                         <Route path="/onBoardingForm" element={<OnBoardingForm/>} exact />
                                         <Route path="/academicDetails" element={<AcademicDetails/>} exact />
+                                        <Route path="/workExperience" element={<WorkExperience/>} exact />
+                                        <Route path="/skillsAndCert" element={<SkillsAndCert/>} exact />
                                         <Route path="/" element={<OnBoardingForm/>} exact />
                                     </Routes>
                                 </div>

@@ -219,6 +219,175 @@ exports.updatePersonStatus = (req, res, next) => {
         });
 };
 
+exports.deleteAcademicDetails=(req,res,next)=>{
+    console.log("req.body",req.params)
+    PersonMaster.deleteOne({ _id: req.params.person_id,"academicDetails._id": req.params.academic_id} )
+        .exec()
+        .then(data => {
+            console.log("data",data);
+            if (data.deletedCount === 1) {
+                res.status(200).json({ deleted: true });
+            } else {
+                res.status(200).json({ deleted: false });
+            }
+        })
+        .catch(err=>{
+
+        })
+}
+
+exports.updateAcademicDetails=(req,res,next)=>{
+    if(!req.body.edit){
+        PersonMaster.updateOne(
+            { _id: req.body.personID },
+            {
+                    $push: {
+                        'academicDetails': req.body.academic
+                    }
+            }
+        )
+            .exec()
+            .then(data => {
+                if (data.nModified == 1) {
+                    PersonMaster.updateOne(
+                        { _id: req.body.personID },
+                        {
+                            $push: {
+                                'updateLog': [{
+                                    updatedAt: new Date(),
+                                    updatedBy: req.body.updatedBy
+                                }]
+                            }
+                        })
+                        .exec()
+                        .then(data => {
+                            res.status(200).json({ updated: true });
+                        })
+                } else {
+                    res.status(200).json({ updated: false });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: err });
+            });
+    }else{
+        console.log("Inside else",req.body)
+        PersonMaster.updateOne(
+            { _id: req.body.personID,"academicDetails._id": req.body.academic_id},
+            {
+                    $set: {
+                        "academicDetails.$" : req.body.academic
+                    }
+            }
+        )
+            .exec()
+            .then(data => {
+                if (data.nModified == 1) {
+                    PersonMaster.updateOne(
+                        { _id: req.body.personID },
+                        {
+                            $push: {
+                                'updateLog': [{
+                                    updatedAt: new Date(),
+                                    updatedBy: req.body.updatedBy
+                                }]
+                            }
+                        })
+                        .exec()
+                        .then(data => {
+                            res.status(200).json({ updated: true });
+                        })
+                } else {
+                    res.status(200).json({ updated: false });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: err });
+            });
+    }
+   
+}
+
+exports.updateSkillAndCert=(req,res,next)=>{
+    console.log("req.body",req.body);
+    if(!req.body.edit){
+        PersonMaster.updateOne(
+            { _id: req.body.personID },
+            {
+                $set: {
+                    "skills" : req.body.skills
+                },
+                $push: {
+                    'certification': req.body.certification
+                }
+            }
+        )
+            .exec()
+            .then(data => {
+                if (data.nModified == 1) {
+                    PersonMaster.updateOne(
+                        { _id: req.body.personID },
+                        {
+                            $push: {
+                                'updateLog': [{
+                                    updatedAt: new Date(),
+                                    updatedBy: req.body.updatedBy
+                                }]
+                            }
+                        })
+                        .exec()
+                        .then(data => {
+                            res.status(200).json({ updated: true });
+                        })
+                } else {
+                    res.status(200).json({ updated: false });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: err });
+            });
+    }else{
+        console.log("Inside else",req.body)
+        PersonMaster.updateOne(
+            { _id: req.body.personID,"cerification._id": req.body.academic_id},
+            {
+                    $set: {
+                        "cerification.$" : req.body.cerification
+                    }
+            }
+        )
+            .exec()
+            .then(data => {
+                if (data.nModified == 1) {
+                    PersonMaster.updateOne(
+                        { _id: req.body.personID },
+                        {
+                            $push: {
+                                'updateLog': [{
+                                    updatedAt: new Date(),
+                                    updatedBy: req.body.updatedBy
+                                }]
+                            }
+                        })
+                        .exec()
+                        .then(data => {
+                            res.status(200).json({ updated: true });
+                        })
+                } else {
+                    res.status(200).json({ updated: false });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: err });
+            });
+    }
+   
+}
+
 exports.updatePerson = (req, res, next) => {
     PersonMaster.updateOne(
         { _id: req.body.personID },

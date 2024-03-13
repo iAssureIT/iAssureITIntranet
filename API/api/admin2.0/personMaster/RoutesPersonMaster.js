@@ -24,6 +24,12 @@ router.patch('/patch/restorestatus',personMaster.person_update_recover_status);
 
 router.patch('/patch', personMaster.updatePerson);
 
+router.patch('/patch/academicDetails', personMaster.updateAcademicDetails);
+
+router.patch('/patch/skillAndCert', personMaster.updateSkillAndCert);
+
+router.delete('/delete/academicDetails/:person_id/:academic_id', personMaster.deleteAcademicDetails);
+
 router.patch('/patch/changeStatus', personMaster.updatePersonStatus);
 
 router.get('/search/:type/:str/:company_Id', personMaster.searchPerson);

@@ -6,15 +6,19 @@ router.patch('/patch/deletestatus',UserController.user_update_delete_status);
 
 router.patch('/patch/restorestatus',UserController.user_update_recover_status);
 
-router.patch('/patch/:ID',UserController.user_update_name_mobile);
+// router.patch('/patch/:ID',UserController.user_update_name_mobile);
 
 router.patch('/patch/profile/:ID', UserController.user_update_name_mobile_profile);
+router.patch('/patch/status',UserController.user_update_many_status);
+
+router.patch('/patch/role',UserController.user_update_many_role);
+
+
 
 router.patch('/patch/status/:ID',UserController.user_update_status);
 
 router.patch('/patch/userimg/:ID',UserController.user_update_img);
 
-router.patch('/patch/status',UserController.user_update_many_status);
 
 router.patch('/patch/role/:action/:ID',UserController.user_update_role);
 

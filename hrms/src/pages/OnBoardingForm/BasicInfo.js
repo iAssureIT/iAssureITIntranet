@@ -57,7 +57,7 @@ const {
     setError,
     clearErrors,
     reset,
-    formState: { errors },
+    formState: { errors ,isValid},
   } = useForm()
 
 
@@ -171,40 +171,42 @@ function format(s) {
         .catch((err)=>console.log("err",err)) // on error show error msg and form should be reset
     }   
 
-    const onErrors = errors => console.error(errors);
+    console.log("isValid",isValid)
+    console.log("error",errors)
+
   return(
     <>
     <div className="w-full">
       <div className='p-7 text-xl font-semibold'>
        {/* <StepperWithContent />  */}
-        <div className='grid  grid-cols bg-grey-200 mb-8'>
+        <div className='grid  grid-cols p-4 bg-white mb-8'>
             
-            <span className='text-left'> Employee Details :</span>
-                <form className='bg-blue-200 my-6  p-4' onSubmit={handleSubmit(onSubmit,onErrors)}>
+            <span className='text-left mb-4'> Employee Details :</span>
+                <form className='' onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid gap-6 md:grid-cols-3 mb-6  rounded">
                         <div>
                             <label for="firstName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name<span className="text-red-500">*</span></label>
-                            <input type="text" id="firstName" value={firstName}  {...register("firstName",{required:"Firstname is required"})} onChange={(e)=>setFirstName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Firstname" required />
-                            {errors.firstName && <span className="text-sm font-medium text-red-500">{errors.firstName.message}</span>}
+                            <input type="text" id="firstName" value={firstName}  {...register("firstName",{required:false,message:"First Name is required"})} onChange={(e)=>setFirstName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Firstname"  />
+                            {errors?.firstName && <span className="text-sm font-medium text-red-500">{errors?.firstName?.message}</span>}
                         </div>
                         <div>
                             <label for="middleName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name<span className="text-red-500">*</span></label>
-                            <input type="text" id="middleName"  value={middleName}  {...register("middleName",{required:true})} onChange={(e)=>setMiddleName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Middlename" required />
-                            {/* {errors.middleName && <span className="text-sm font-medium text-red-500">Middle Name is required</span>} */}
+                            <input type="text" id="middleName"  value={middleName}  {...register("middleName",{required:false})} onChange={(e)=>setMiddleName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Middlename"  />
+                            {errors.middleName && <span className="text-sm font-medium text-red-500">Middle Name is required</span>}
                         </div>
                         <div>
                             <label for="lastName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name<span className="text-red-500">*</span></label>
-                            <input type="text" id="lastName" value={lastName}  {...register("lastName",{required:true})} onChange={(e)=>setLastName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Lastname" required/>
-                            {/* {errors.lastName && <span className="text-sm font-medium text-red-500">Last Name is required</span>} */}
+                            <input type="text" id="lastName" value={lastName}  {...register("lastName",{required:false})} onChange={(e)=>setLastName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Lastname" />
+                            {errors.lastName && <span className="text-sm font-medium text-red-500">Last Name is required</span>}
                         </div>
                         <div >
                             <label for="dob" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date Of Birth<span className="text-red-500">*</span></label>
-                            <input type="date" id="dob"  value={moment(dob).utc().format('YYYY-DD-MM',{required:true})} {...register("dob")} onChange={(e)=>setDOB(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                            <input type="date" id="dob"  value={moment(dob).utc().format('YYYY-DD-MM',{required:false})} {...register("dob")} onChange={(e)=>setDOB(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             {/* {errors.dob && <span className="text-sm font-medium text-red-500">Select Date Of Birth</span>} */}
                         </div>
                         <div className="mt-4">
                         <span className="text-gray-700">Gender</span>
-                            <div id="gender" {...register("gender",{required:true})}  className="mt-2">
+                            <div id="gender" {...register("gender",{required:false})}  className="mt-2">
                                 <label className="inline-flex items-center">
                                 <input type="radio"  className="form-radio" checked={gender==="Male" ? true :false} name="Male" value="Male"  onChange={(e)=>setGender(e.target.value)} />
                                 <span className="ml-2">Male</span>
@@ -217,7 +219,7 @@ function format(s) {
                         </div> 
                         <div >
                             <label for="maritalStatus" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Marital Status<span className="text-red-500">*</span></label>
-                            <select id="maritalStatus" value={maritalStatus} {...register("maritalStatus",{required:true})} onChange={(e)=>setMaritalStatus(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="maritalStatus" value={maritalStatus} {...register("maritalStatus",{required:false})} onChange={(e)=>setMaritalStatus(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                 <option value="" disabled selected>Select Marital Status</option>
                                 <option value="Married">Married</option>
                                 <option value="Single">Single</option>
@@ -226,7 +228,7 @@ function format(s) {
                         </div>  
                         <div >
                             <label for="nationality" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Noationality<span className="text-red-500">*</span></label>
-                            <select id="nationality" value={nationality} {...register("nationality",{required:true})} onChange={(e)=>setNationality(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="nationality" value={nationality} {...register("nationality",{required:false})} onChange={(e)=>setNationality(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                 <option value="" disabled selected>Select Nationality</option>
                                 <option value="afghan">Afghan</option>
                                 <option value="albanian">Albanian</option>
@@ -424,66 +426,66 @@ function format(s) {
                         </div>  
                         <div >
                             <label for="aadhar_card_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Aadhar Card Number (XXXX-XXXX-XXXX)<span className="text-red-500">*</span></label>
-                            <input type="text" id="aadhar_card_no" value={aadharCardNo} {...register("aadhar_card_no",{required:true, pattern: /^\d{4}-\d{4}-\d{4}$/ })} onChange={(e)=>setAadharCardNo(e.target.value)} maxLength={14} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                            {/* {errors.aadhar_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid Aadhar Card Number (XXXX-XXXX-XXXX)</span>} */}
+                            <input type="text" id="aadhar_card_no" value={aadharCardNo} {...register("aadhar_card_no",{required:false, pattern: /^\d{4}-\d{4}-\d{4}$/ })} onChange={(e)=>setAadharCardNo(e.target.value)} maxLength={14} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            {errors.aadhar_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid Aadhar Card Number (XXXX-XXXX-XXXX)</span>}
                         </div> 
                         <div >
                             <label for="pan_card_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PAN Card Number (ABCDE1234F)<span className="text-red-500">*</span></label>
-                            <input type="text" id="pan_card_no" value={pan_card_no} {...register("pan_card_no",{required:true, pattern: /^[A-Z]{5}[0-9]{4}[A-Z]$/ })} onChange={(e)=>setPanCardNo(e.target.value)} maxLength={10} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                            {/* {errors.pan_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid PAN Card Number (ABCDE1234F)</span>} */}
+                            <input type="text" id="pan_card_no" value={pan_card_no} {...register("pan_card_no",{required:false, pattern: /^[A-Z]{5}[0-9]{4}[A-Z]$/ })} onChange={(e)=>setPanCardNo(e.target.value)} maxLength={10} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            {errors.pan_card_no && <span className="text-sm font-medium text-red-500">Please enter a valid PAN Card Number (ABCDE1234F)</span>}
                         </div> 
                         </div>
                         <span className='text-left'> Address :</span>
                     <div className="grid gap-6 my-6 md:grid-cols-3   rounded">
                         <div>
                             <label for="addressLine1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current Address<span className="text-red-500">*</span></label>
-                            <textarea type="text" id="addressLine1" value={addressLine1} {...register("addressLine1",{required:true})} onChange={(e)=>setAddressLine1(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required> </textarea>
+                            <textarea type="text" id="addressLine1" value={addressLine1} {...register("addressLine1",{required:false})} onChange={(e)=>setAddressLine1(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" > </textarea>
                         </div>
                         <div>
                             <label for="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City<span className="text-red-500">*</span></label>
-                            <input type="text" id="city" value={city} {...register("city",{required:true})} onChange={(e)=>setCity(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter City" required/>
+                            <input type="text" id="city" value={city} {...register("city",{required:false})} onChange={(e)=>setCity(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter City" />
                         </div>
                         <div>
                             <label for="state" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State<span className="text-red-500">*</span></label>
-                            <input type="text" id="state" value={state}  {...register("state",{required:true})} onChange={(e)=>setState(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter State" required/>
+                            <input type="text" id="state" value={state}  {...register("state",{required:false})} onChange={(e)=>setState(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter State" />
                         </div>
                         <div>
                             <label for="country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                            <input type="text" id="country" value={country} {...register("country",{required:true})} onChange={(e)=>setCountry(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Country" required/>
+                            <input type="text" id="country" value={country} {...register("country",{required:false})} onChange={(e)=>setCountry(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Country" />
                         </div> 
                         <div>
                             <label for="pincode" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pincode</label>
-                            <input type="text" id="pincode" value={pincode} {...register("pincode",{required:true})} onChange={(e)=>setPincode(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Pincode"required />
+                            <input type="text" id="pincode" value={pincode} {...register("pincode",{required:false})} onChange={(e)=>setPincode(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Pincode" />
                         </div>
                         </div>
                         <span className='text-left'> Contact Info :</span>
                     <div className="grid gap-6 my-6 md:grid-cols-3 rounded">
                         <div>
                             <label for="personal_email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Personal Email<span className="text-red-500">*</span></label>
-                            <input type="email" id="personal_email" value={personal_email} {...register("personal_email",{required:true})} onChange={(e)=>setPersonalEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Personal Email" />
-                            {/* {errors.personal_email && <span className="text-sm font-medium text-red-500">Please enter valid data</span>} */}
+                            <input type="email" id="personal_email" value={personal_email} {...register("personal_email",{required:false})} onChange={(e)=>setPersonalEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Personal Email" />
+                            {errors.personal_email && <span className="text-sm font-medium text-red-500">Please enter valid data</span>}
                         </div>
                         <div>
                             <label for="personal_mobile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Personal Mobile<span className="text-red-500">*</span></label>
-                            <input type="tel" id="personal_mobile" value={personal_mobile} {...register("personal_mobile",{required:true})} onChange={(e)=>setContactNo(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Mobile Number"  />
-                            {/* {errors.personal_mobile && <span className="text-sm font-medium text-red-500">Please enter valid data</span>} */}
+                            <input type="tel" id="personal_mobile" value={personal_mobile} {...register("personal_mobile",{required:false})} onChange={(e)=>setContactNo(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Mobile Number"  />
+                            {errors.personal_mobile && <span className="text-sm font-medium text-red-500">Please enter valid data</span>}
                             {/* , pattern: /^\+?\d{10}$/ */}
                         </div>
                         <div>
                             <label for="alternate_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alternate Number<span className="text-red-500">*</span></label>
-                            <input type="tel" id="alternate_no" value={alternate_no} {...register("alternate_no",{required:true,pattern: /^\+?\d{10}$/})} onChange={(e)=>setAlternateNo(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Alternate Mobile Number"  />
-                            {/* {errors.alternate_no && <span className="text-sm font-medium text-red-500">Please enter valid data</span>} */}
+                            <input type="tel" id="alternate_no" value={alternate_no} {...register("alternate_no",{required:false,pattern: /^\+?\d{10}$/})} onChange={(e)=>setAlternateNo(e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Alternate Mobile Number"  />
+                            {errors.alternate_no && <span className="text-sm font-medium text-red-500">Please enter valid data</span>}
                         </div>
                       
                        
                         {/* <div >
                             <label for="passport_no" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Passport Number<span className="text-red-500">*</span></label>
-                            <input type="text" id="passport_no" {...register("passport_no",{required:true, pattern: /^[A-Z0-9]{7,}$/})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <input type="text" id="passport_no" {...register("passport_no",{required:false, pattern: /^[A-Z0-9]{7,}$/})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             {errors.passport_no && <span className="text-sm font-medium text-red-500">Please enter a valid Passport Number</span>}
                         </div>  */}
                         <div >
                             <label for="blood_group" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Blood Group<span className="text-red-500">*</span></label>
-                            <select id="blood_group" value={blood_group} {...register("blood_group",{required:true})} onChange={(e)=>setBloodGroup(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="blood_group" value={blood_group} {...register("blood_group",{required:false})} onChange={(e)=>setBloodGroup(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                 <option value="" disabled selected>Select Blood Group</option>
                                 <option value="A+">A+</option>
                                 <option value="A-">A-</option>
@@ -496,11 +498,10 @@ function format(s) {
                             </select>
                         </div>  
                     </div>
-                    <div className="flex justify-end">
-                        <button type="submit"  className="text-white bg-blue-700  mr-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                        <button type="button" onClick={() => reset()} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Reset</button>
-                        
-                    </div>
+                    <div className="flex justify-between">
+                    <button type="button" onClick={() => reset()} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Previous</button>
+                    <button type="submit"  className="text-white bg-blue-700  mr-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>
+                </div>
                 </form>
         </div>
         </div>

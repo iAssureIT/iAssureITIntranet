@@ -977,6 +977,7 @@ exports.user_update_recover_status = (req, res, next) => {
 
 exports.user_update_many_status = (req, res, next) => {
   var userID = req.body.userID.map((a, i) => ObjectID(a));
+  console.log("userID",userID);
   User.updateMany(
     { _id: { $in: userID } },
     {
@@ -984,6 +985,57 @@ exports.user_update_many_status = (req, res, next) => {
         "profile.status": req.body.status,
       },
     }
+  )
+    .exec()
+    .then((data) => {
+      if (data.nModified == 1) {
+        User.updateOne(
+          { _id: { $in: userID } },
+          {
+            $push: {
+              statusLog: [
+                {
+                  status: req.body.status,
+                  updatedAt: new Date(),
+                  updatedBy: req.body.username,
+                },
+              ],
+            },
+          }
+        )
+          .exec()
+          .then((data) => {
+            res.status(200).json("USER_STATUS_UPDATED");
+          });
+      } else {
+        res.status(200).json("USER_STATUS_NOT_UPDATED");
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.user_update_many_role = (req, res, next) => {
+  var userID = req.body.userID.map((a, i) => ObjectID(a));
+  console.log("userID",userID);
+  if(req.body.action === "add"){
+    var query = {
+      $push: {
+        "roles": req.body.role,
+      },
+    }
+  }else if(req.body.action === "remove"){
+    var query = {
+      $pull: {
+        "roles": req.body.role,
+      },
+    }
+  }
+  User.updateMany(
+    { _id: { $in: userID } },query
   )
     .exec()
     .then((data) => {
@@ -2366,23 +2418,34 @@ exports.search_text = (req, res, next) => {
           var returnData = [];
           for (i = 0; i < data.length; i++) {
             var loginTokenscount = data[i].services.resume.loginTokens.length;
+
             returnData.push({
               _id: data[i]._id,
-              email: data[i].profile.email, //Mandatory
               firstname: data[i].profile.firstname,
               lastname: data[i].profile.lastname,
               companyID: data[i].profile.companyID,
               companyName: data[i].profile.companyName,
               workLocation: data[i].profile.workLocation,
+              email: data[i].profile.email, //Mandatory
               mobNumber: data[i].profile.mobile,
               role: data[i].roles, //Mandatory
               status: data[i].profile.status, //Either "Active" or "Inactive"
               fullName: data[i].profile.fullName,
+              createdAt: data[i].createdAt,
+              clientId: data[i].clientId,
               lastLogin:
                 loginTokenscount > 0
                   ? data[i].services.resume.loginTokens[loginTokenscount - 1]
                       .loginTimeStamp
                   : null,
+              // statusupdatedAt:
+              //   statuslogLength > 0
+              //     ? data[i].statusLog[statuslogLength - 1].updatedAt
+              //     : "-",
+              // statusupdatedBy:
+              //   statuslogLength > 0
+              //     ? data[i].statusLog[statuslogLength - 1].updatedBy
+              //     : "-",
             });
           }
           if (i >= data.length) {
@@ -2393,6 +2456,7 @@ exports.search_text = (req, res, next) => {
         }
       })
       .catch((err) => {
+        console.log("err",err);
         res.status(500).json({
           error: err,
         });
