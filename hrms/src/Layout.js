@@ -17,13 +17,9 @@ import PolicyView from './pages/HumanResource/PolicyView';
 import ApplicationMangement from './pages/ApplicationManagement/ApplicationManagement';
 import EmployeeChart from './pages/OrgChart/EmployeeChart';
 import AcademicDetails from './pages/OnBoardingForm/AcademicDetails';
-<<<<<<< Updated upstream
 import PendingRequest from './pages/ApplicationManagement/PendingRequest';
-
-=======
 import WorkExperience from './pages/OnBoardingForm/WorkExperience';
 import SkillsAndCert from './pages/OnBoardingForm/SkillsAndCert';
->>>>>>> Stashed changes
 const Layout = ({ children }) => {
     console.log("children",children);
     const [open,setOpen]=useState(false);
