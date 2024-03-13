@@ -188,23 +188,23 @@ function AddEmployee(props) {
                     <div className="grid gap-6 mb-6 md:grid-cols-2">
                         <div>
                             <label for="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First name</label>
-                            <input type="text" id="first_name" {...register("first_name",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Firstname..." required />
+                            <input type="text" id="first_name" {...register("first_name",{required:true})} value={first_name} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Firstname..." required />
                         </div>
                         <div>
                             <label for="last_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last name</label>
-                            <input type="text" id="last_name" {...register("last_name",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Lastname..." required />
+                            <input type="text" id="last_name" {...register("last_name",{required:true})} value={last_name}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Lastname..." required />
                         </div>
                         <div>
                             <label for="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
-                            <input type="tel" id="phone" {...register("phone",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Mobile number..." pattern="/^+91(7\d|8\d|9\d)\d{9}$/" required />
+                            <input type="tel" id="phone" {...register("phone",{required:true})} value={phone}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Mobile number..." pattern="/^+91(7\d|8\d|9\d)\d{9}$/" required />
                         </div>
                         <div >
                             <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
-                            <input type="email" id="email" {...register("email",{required:true})} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Email..." required />
+                            <input type="email" id="email" {...register("email",{required:true})} value={email} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Email..." required />
                         </div> 
                         <div >
                             <label for="role" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Role</label>
-                            <select id="role" {...register("role",{required:true})}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="role" {...register("role",{required:true})} value={role}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>Select Role</option>
                                 {roleList &&
                                     roleList.map((item,index)=>{
@@ -217,7 +217,7 @@ function AddEmployee(props) {
                         </div> 
                         <div >
                             <label for="department" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Department</label>
-                            <select id="department" {...register("department",{required:true})}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e)=>{getDesignationList(e.target.value)}}>
+                            <select id="department" {...register("department",{required:true})} value={department} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e)=>{getDesignationList(e.target.value)}}>
                                 <option selected>Select Department</option>
                                 {departmentList &&
                                     departmentList.map((item,index)=>{
@@ -230,7 +230,7 @@ function AddEmployee(props) {
                         </div> 
                         <div >
                             <label for="designation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Designation</label>
-                            <select id="designation" {...register("designation",{required:true})}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="designation" {...register("designation",{required:true})} value={designation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>Select Designation</option>
                                 {designationList &&
                                     designationList.map((item,index)=>{
@@ -243,7 +243,7 @@ function AddEmployee(props) {
                         </div> 
                         <div >
                             <label for="reporting_manager" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Reporting Manager</label>
-                            <select id="reporting_manager" {...register("reporting_manager",{required:true})}    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="reporting_manager" {...register("reporting_manager",{required:true})} value={reporting_manager}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option  selected>Select Reporting Manager</option>
                                     {managerList  && managerList.length> 0 &&
                                     managerList.map((item,index)=>{
@@ -256,7 +256,7 @@ function AddEmployee(props) {
                         </div> 
                     </div>
                    
-                    <button type="submit" className="text-white bg-site hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{"Submit"}</button>
+                    <button type="submit" className="text-white bg-site hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{props.edit? "Update":"Submit"}</button>
                 </form>
         </div>
         </div>
