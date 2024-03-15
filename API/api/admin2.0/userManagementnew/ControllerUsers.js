@@ -695,6 +695,7 @@ exports.user_update_name_mobile = (req, res, next) => {
 
 //amit===================
 exports.user_update_name_mobile_profile = (req, res, next) => {
+  console.log("req.body",req.body);
   User.findOne({ _id: req.params.ID })
     .exec()
     .then((user) => {
@@ -707,9 +708,13 @@ exports.user_update_name_mobile_profile = (req, res, next) => {
               "profile.lastname": req.body.lastname,
               "profile.fullName": req.body.firstname + " " + req.body.lastname,
               "profile.mobile": req.body.mobNumber,
-              "profile.image": req.body.image,
-              role: req.body.role,
+              // "profile.image": req.body.image,
+              "role": req.body.role,
               "profile.email": req.body.email,
+              "department":req.body.department,
+              "orgLevel" : req.body.orgLevel,
+              "designation":req.body.designation,
+              "reporting_id":req.body.reporting_id
             },
           }
         )
@@ -1193,9 +1198,10 @@ exports.user_update_password_ID = (req, res, next) => {
 
 exports.fetch_user_ID = (req, res, next) => {
   User.findOne({ _id: req.params.ID })
-    .exec()
+    .populate('reporting_id')
     .then((data) => {
       if (data) {
+        console.log("data",data);
         // console.log("fetch_user_ID",data);
         var loginTokenscount = data.services.resume.loginTokens.length;
         var statuslogLength = data.statusLog ? data.statusLog.length : 0;
@@ -1212,6 +1218,10 @@ exports.fetch_user_ID = (req, res, next) => {
           mobile: data.profile.mobile,
           role: data.roles, //Mandatory
           image: data.profile.image,
+          designation:data.designation,
+          department:data.department,
+          orgLevel:data.orgLevel,
+          reporting_id : data.reporting_id,
           status: data.profile.status, //Either "Active" or "Inactive"
           fullName: data.profile.fullName,
           createdAt: data.createdAt,
@@ -1494,7 +1504,6 @@ exports.post_list_users = (req, res, next) => {
       .exec()
       .then((data) => {
         if (data) {
-          console.log("--------------data----------",data);
           var i = 0;
           var returnData = [];
           for (i = 0; i < data.length; i++) {

@@ -232,25 +232,25 @@ function UserManagement() {
             </div>
             <div className='flex justify-between mt-8'>
                 <Button className="bg-site" onClick={() => setOpenRoleModal(true)}>Add Role</Button>
-                <Button className="bg-site" onClick={() => setOpenUserModal(true)}>Add User</Button>
+                <Button className="bg-site" onClick={() => {setOpenUserModal(true);setEdit(false)}}>Add User</Button>
             </div>
             <div className='grid gap-6 md:grid-cols-3 mt-6 flex justify-between'>
             <div >
                   {/* <label for="action" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Action<span className="text-red-500">*</span></label> */}
                   <select id="action" value={action} {...register("action",{required:false})} onChange={(e)=>performAction(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                   <option value="" disabled selected>Select Action</option>
-                    <optgroup label="Active / Block" style={{color:"#fff"}}>
+                    <optgroup label="Active / Block" >
                       <option value="status-block">Add block role to selected</option>
                       <option value="status-active">Add active role to selected</option> 
                     </optgroup>   
-                    <optgroup label="Add Roles" style={{color:"#fff"}}>
+                    <optgroup label="Add Roles" >
                       {roleList.map((item,index)=>{
                       return(
                          <option value={"add-"+item.role}>Add {item.role} role to selected</option>
                       )
                       })}
                     </optgroup> 
-                    <optgroup label="Remove Roles" style={{color:"#fff"}}>
+                    <optgroup label="Remove Roles" >
                     {roleList.map((item,index)=>{
                       return(
                          <option value={"remove-"+item.role}>Remove {item.role} role from selected</option>
@@ -418,7 +418,7 @@ function UserManagement() {
         <Modal.Header>{edit?"Edit":"Add"} Employee</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
-                <AddEmployee getUserList={getUserList} edit={true} editUserId={editUserId} />            
+                <AddEmployee getUserList={getUserList} edit={edit} editUserId={editUserId} />            
           </div>
         </Modal.Body>
       </Modal>

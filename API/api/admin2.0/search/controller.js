@@ -986,7 +986,7 @@ exports.getSearchResultsOld = (req,res,next)=>{
 	// console.log("selector2 = ", selector2);
 
 	User.find(selector1,{services:0, statusLog:0})
-		.populate("profile.company_id")
+		.populate("profile.company_id",{'profile':1})
 		.then(async (searchResults) =>{
 			// console.log("searchResults => ", searchResults);
 			var numOfIntroCalls = [];

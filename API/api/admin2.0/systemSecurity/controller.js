@@ -1300,6 +1300,7 @@ exports.user_signup_user_otp = (req, res, next) => {
                               },
                               username: emailId.toLowerCase(),
                               authService: req.body.authService,
+
                               profile: {
                                 firstname: req.body.firstname,
                                 lastname: req.body.lastname,
@@ -2239,6 +2240,7 @@ exports.user_signup_user = (req, res, next) => {
                             department: req.body.department,
                             designation: req.body.designation,
                             orgLevel : req.body.orgLevel,
+                            reporting_id : req.body.reporting_id,
                             profile: {
                               employeeID: nextEmployeeID,
                               firstname: req.body.firstname,
