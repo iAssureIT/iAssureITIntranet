@@ -44,7 +44,7 @@ function AddOrgLevel() {
             axios.patch('/api/orgLevel/patch', formValues)
           .then((response) => {
                 console.log("response",response);
-                  if(response.updated){
+                  if(response.data.updated){
                     swal({
                         text: "Organization Level Updated Successfully."
                     });
@@ -72,7 +72,7 @@ function AddOrgLevel() {
         axios.post('/api/orgLevel/post', formValues)
             .then((response) => {
                 console.log("response",response);
-                if(response.created){
+                if(response.data.created){
                     swal({
                         text: "organization Level Added Successfully."
                     });

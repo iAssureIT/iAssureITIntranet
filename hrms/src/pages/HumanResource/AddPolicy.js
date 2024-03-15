@@ -9,6 +9,15 @@ import swal from 'sweetalert';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+    policy_name: yup.string().required('This field is required'),
+    policy_category: yup.string().required('This field is required'),
+    // policy_summary: yup.string().required('This field is required'),
+  }).required();
+
 function AddPolicy(props) {
     console.log("props",props);
     const {policy,getPolicyList,edit,openModal}=props;
@@ -19,12 +28,16 @@ function AddPolicy(props) {
     const [policy_name,setPolicyName] = useState('');
     const [policy_category,setPolicyCategory] = useState('');
     const [policy_summary,setPolicySummary] = useState('');
+    
     const {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
-      } = useForm()
+      } = useForm({
+        resolver: yupResolver(schema),
+      })
 
     useEffect(() => {
         var user =  JSON.parse(localStorage.getItem('userDetails'));
@@ -32,6 +45,7 @@ function AddPolicy(props) {
         setPolicyName(policy?.policy_name?policy?.policy_name:'');
         setPolicyCategory(policy?.policy_category?policy?.policy_category:'');
         setPolicySummary(policy?.policy_summary?policy?.policy_summary:'');
+        reset(policy);
       },[props]);
 
     
@@ -72,7 +86,7 @@ function AddPolicy(props) {
         }
     }   
 
-    
+    console.log("errors",errors);
 
     return (
     <div className="w-full  ">
@@ -83,22 +97,24 @@ function AddPolicy(props) {
                     <div className="grid gap-6 mb-6 md:grid-cols-1">
                         <div>
                             <label for="policy_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Policy name</label>
-                            <input type="text" id="policy_name"  {...register("policy_name",{required:true})}value={policy_name} onChange={(e)=>setPolicyName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Policy Name..."  />
+                            <input type="text" id="policy_name"  {...register("policy_name")} value={policy_name} onChange={(e)=>setPolicyName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Policy Name..."  />
+                            {errors?.policy_name && <span className="text-sm font-medium text-red-500">{errors.policy_name.message}</span>}
                         </div>
                         <div >
                             <label for="policy_category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-                            <select id="policy_category" {...register("policy_category",{required:true})} value={policy_category} onChange={(e)=>setPolicyCategory(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select id="policy_category" {...register("policy_category")} value={policy_category} onChange={(e)=>setPolicyCategory(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled selected>Select Category</option>
                                     <option value="Leave policy">Leave Policy</option>
                                     <option value="Payroll policy">Payroll Policy</option>
                             </select>
+                            {errors?.policy_category && <span className="text-sm font-medium text-red-500">{errors.policy_category.message}</span>}
                         </div> 
 
                         <CKEditor
                                 editor={ ClassicEditor }
                                 data={policy_summary}
-                                // id="policy_summary" 
-                                // {...register("policy_summary",{required:true})}
+                                id="policy_summary" 
+                                // {...register("policy_summary")}
                                 onReady={ editor => {
                                     // You can store the "editor" and use when it is needed.
                                     console.log( 'Editor is ready to use!', editor );
@@ -113,6 +129,7 @@ function AddPolicy(props) {
                                     console.log( 'Focus.', editor );
                                 } }
                             />
+                            {errors?.policy_summary && <span className="text-sm font-medium text-red-500">{errors.policy_summary.message}</span>}
                     </div>
                    
                     <button type="submit" className="text-white bg-site hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>

@@ -45,7 +45,7 @@ function AddDepartment() {
             axios.patch('/api/department/patch', formValues)
           .then((response) => {
                 console.log("response",response);
-                  if(response.updated){
+                  if(response.data.updated){
                     swal({
                         text: "Department Updated Successfully."
                     });
@@ -73,7 +73,7 @@ function AddDepartment() {
         axios.post('/api/department/post', formValues)
             .then((response) => {
                 console.log("response",response);
-                if(response.created){
+                if(response.data.created){
                     swal({
                         text: "Department Added Successfully."
                     });

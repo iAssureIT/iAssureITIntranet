@@ -7,6 +7,7 @@ import AddOrgLevel from "./AddOrgLevel";
 
 const Tabs = ({ color }) => {
   const [openTab, setOpenTab] = React.useState(1);
+ 
 
   const masterList = [
     {

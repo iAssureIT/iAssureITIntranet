@@ -76,7 +76,7 @@ console.log("policyList",policyList);
         </div>
        
         <div className='flex justify-between mt-8'>
-            <Button className="bg-site" onClick={() => openModal(true)}>Add Policy</Button>
+            <Button className="bg-site" onClick={() => {openModal(true);setPolicy('')}}>Add Policy</Button>
         </div>
      </div>
     <Card className=" overflow-scroll">
@@ -146,21 +146,15 @@ console.log("policyList",policyList);
                         </Typography>
                     </td>
                     <td className={classes}>
-                        <Tooltip content="Edit Policy" >
                         <IconButton variant="text" onClick={()=>editPolicy(policyList[index])}>
                             <PencilIcon className="h-4 w-4" />
                         </IconButton>
-                        </Tooltip>
-                        <Tooltip content="Delete Policy">
                         <IconButton variant="text"  onClick={()=>deletePolicy(policyList[index])}>
                             <TrashIcon className="h-4 w-4" />
                         </IconButton>
-                        </Tooltip>
-                        <Tooltip content="Policy Preview" >
                         <IconButton variant="text"  onClick={()=>navigate('/policy_view',{state:policyList[index]})}>
                             <EyeIcon className="h-4 w-4" />
                         </IconButton>
-                        </Tooltip>
                     </td>
                     </tr>
                 );
@@ -171,13 +165,14 @@ console.log("policyList",policyList);
             </tbody>
             </table>
     </Card>
-    <Modal show={modal} onClose={() => openModal(false)}>
+    <Modal show={modal} onClose={() => {openModal(false);setEdit(false)}}>
         <Modal.Header>{edit? "Edit policy":"Add Policy"}</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
                 <AddPolicy 
                 edit={edit}
                 policy={policy}
+                setEdit={setEdit}
                 getPolicyList={getPolicyList}
                 openModal={openModal}
                 />            
