@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
 import { Card,Typography ,Tooltip,IconButton} from '@material-tailwind/react';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-
+import { Button, Modal } from 'flowbite-react';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 const TABLE_HEAD = ["Organization Level",  "Action"];
 
@@ -17,6 +18,7 @@ function AddOrgLevel() {
     const [update,setUpdate] = useState(false);
     const [orgLevel,setOrgLevel] = useState('');
     const [orgLevel_id,setOrgLevelId] = useState('');
+    const [deleteModal,setDeleteModal]=useState(false) ;
     const {
         register,
         handleSubmit,
@@ -115,15 +117,15 @@ function AddOrgLevel() {
         setOrgLevelId(data.orgLevel_id)
     }
 
-    const deleteUser=(data)=>{
-        console.log("orgLevel",data);
-        axios.delete('/api/orgLevel/delete/'+data.orgLevel_id)
+    const deleteUser=()=>{
+        axios.delete('/api/orgLevel/delete/'+orgLevel_id)
         .then((response) => {
          console.log("response orgLevel",response);
             swal({
-            text: "organization Level Deleted Successfully."
+            text: "Organization Level Deleted Successfully."
             });
             getOrganisationList();
+            setDeleteModal(false);
         })
         .catch((err)=>console.log("err",err))
     }
@@ -181,16 +183,12 @@ function AddOrgLevel() {
                             </Typography>
                         </td>
                         <td className={classes}>
-                      <Tooltip content="Edit organization Level" >
                         <IconButton variant="text" onClick={()=>editUser(orgLevelList[index])}>
                           <PencilIcon className="h-4 w-4" />
                         </IconButton>
-                      </Tooltip>
-                      <Tooltip content="Delete organization Level">
-                        <IconButton variant="text"  onClick={()=>deleteUser(orgLevelList[index])}>
+                        <IconButton variant="text"  onClick={()=>{setDeleteModal(true);setOrgLevelId(orgLevelList[index].orgLevel_id)}}>
                           <TrashIcon className="h-4 w-4" />
                         </IconButton>
-                      </Tooltip>
                     </td>
                         </tr>
                     );
@@ -198,7 +196,25 @@ function AddOrgLevel() {
                 </tbody>
                 </table>
             </Card>
-
+            <Modal show={deleteModal} size="md" onClose={() => setDeleteModal(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete organization level?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => deleteUser()}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setDeleteModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

@@ -155,7 +155,7 @@ function UserManagement() {
       .then(res=>{
         console.log("res",res)
         swal({
-          text:res.data
+          text:res.data === "USER_STATUS_NOT_UPDATED" ? "Please select atleast one user" : res.data
           });
           getUserList();
           setMultiChecked(false);
@@ -176,7 +176,7 @@ function UserManagement() {
       .then(res=>{
         console.log("res",res)
         swal({
-          text:res.data
+          text:res.data === "USER_STATUS_NOT_UPDATED" ? "Please select atleast one user" : res.data
           });
           getUserList();
           setMultiChecked(false);

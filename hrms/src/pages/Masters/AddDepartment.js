@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
 import { Card,Typography ,Tooltip,IconButton} from '@material-tailwind/react';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-
+import { Button, Modal } from 'flowbite-react';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 const TABLE_HEAD = ["Department",  "Action"];
 
@@ -17,6 +18,8 @@ function AddDepartment() {
     const [update,setUpdate] = useState(false);
     const [department,setdepartment] = useState('');
     const [department_id,setdepartmentId] = useState('');
+    const [deleteModal,setDeleteModal]=useState(false) ;
+    const [deleteDept_id,setDeleteDeptId]=useState('')
     const {
         register,
         handleSubmit,
@@ -115,14 +118,15 @@ function AddDepartment() {
         setdepartmentId(data.department_id)
     }
 
-    const deleteUser=(data)=>{
-        console.log("department",data);
-        axios.delete('/api/department/delete/'+data.department_id)
+    const deleteDepartment=()=>{
+      console.log("deleteDept_id",deleteDept_id);
+        axios.delete('/api/department/delete/'+deleteDept_id)
         .then((response) => {
          console.log("response department",response);
             swal({
             text: "Department Deleted Successfully."
             });
+            setDeleteModal(false);
             getdepartmentList();
         })
         .catch((err)=>console.log("err",err))
@@ -182,16 +186,12 @@ function AddDepartment() {
                             </Typography>
                         </td>
                         <td className={classes}>
-                      <Tooltip content="Edit Department" >
                         <IconButton variant="text" onClick={()=>editUser(departmentList[index])}>
                           <PencilIcon className="h-4 w-4" />
                         </IconButton>
-                      </Tooltip>
-                      <Tooltip content="Delete Department">
-                        <IconButton variant="text"  onClick={()=>deleteUser(departmentList[index])}>
+                        <IconButton variant="text"   onClick={()=>{setDeleteModal(true);setDeleteDeptId(departmentList[index].department_id)}}>
                           <TrashIcon className="h-4 w-4" />
                         </IconButton>
-                      </Tooltip>
                     </td>
                         </tr>
                     )})
@@ -211,7 +211,25 @@ function AddDepartment() {
                 </tbody>
                 </table>
             </Card>
-
+            <Modal show={deleteModal} size="md" onClose={() => setDeleteModal(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this department?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => deleteDepartment()}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setDeleteModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
