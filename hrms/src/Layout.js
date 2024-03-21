@@ -44,14 +44,14 @@ const Layout = ({ children }) => {
     return (
         <>
             <Router>
-                <div className={open ? 'flex-none w-[20%] h-screen':'flex-none w-[5%] h-screen'}>
+                <div className={open ? 'flex-none w-[20%] min-h-screen':'flex-none w-[5%] min-h-screen'}>
                     <SideBar handleCallback={handleCallback} openSidebar={open}/>
                 </div>
-                <div className={open ? 'flex-none w-[80%] h-screen':'flex-none w-[95%] h-screen'}>
+                <div className={open ? 'flex-none w-[80%] min-h-screen bg-blue-100':'flex-none w-[95%] min-h-screen bg-blue-100'}>
                     <div >
                         <HeaderView handleCallback={handleCallback}/>
                     </div>
-                    <div className='bg-blue-100'>
+                    <div className='min-h-screen'>
                         <Routes >
                             <Route path="/admin" element={<Admin />} />
                             <Route path="/" element={<Dashboard />} exact />

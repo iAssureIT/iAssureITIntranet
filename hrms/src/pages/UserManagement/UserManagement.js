@@ -223,8 +223,8 @@ function UserManagement() {
       
   return (
     <>
-    <div className="w-full App ">
-        <div className='p-7 text-xl font-semibold  h-screen'>
+    <div className="w-full App  h-screen">
+        <div className='p-7 text-xl font-semibold '>
             <div className='flex justify-between'>
                 <span className='text-left'>USER MANAGEMENT</span>
                 <Button className="bg-red-500" onClick={() => setDeleteUserModal(true)}>Deleted Users</Button>

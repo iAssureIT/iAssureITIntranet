@@ -5,6 +5,7 @@ const Policy = mongoose.Schema({
     policy_name     : String,
     policy_category : String,
     policy_summary  : String,
+    policy_doc    : String,
     createdBy       : { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     createdAt       : Date,
 });

@@ -16,6 +16,7 @@ exports.insertPolicy = (req,res,next)=>{
                 policy_name : req.body.policy_name,
                 policy_category    : req.body.policy_category,
                 policy_summary   : req.body.policy_summary,
+                policy_doc    : req.body.policy_doc,
                 createdBy : req.body.createdBy,
                 createdAt : new Date(),
         });		

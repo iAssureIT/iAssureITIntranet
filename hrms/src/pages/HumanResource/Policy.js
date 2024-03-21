@@ -69,10 +69,10 @@ console.log("policyList",policyList);
 
 
   return (
-    <div className="w-full App p-4">
+    <div className="w-full h-full  p-4">
       <div className='text-xl font-semibold mb-8'>
         <div className='grid  grid-cols bg-grey-200 '>
-                <span className='text-left'>Human Resource / Policy</span>
+            <span className='text-left'>Human Resource / Policy</span>
         </div>
        
         <div className='flex justify-between mt-8'>
