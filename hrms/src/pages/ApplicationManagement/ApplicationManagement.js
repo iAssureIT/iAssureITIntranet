@@ -10,14 +10,12 @@ import swal from 'sweetalert';
 import { DocumentViewer } from 'react-documents';
 import {useNavigate} from 'react-router-dom';
 import LeaveApplication from './LeaveApplication';
-const TABLE_HEAD = ["SR. No.",  "APLICATION FORM",,"CATEGORY","SUMMARY","APPLICATION"];
+const TABLE_HEAD = ["SR. No.",  "APLICATION FORM","APPLICATION"];
 const TABLE_BODY = [
-    {"type" : "Leave Application","category":"Casual Leave","summary":""},
-    {"type" : "Leave Application","category":"Sick Leave","summary":""},
-    {"type" : "Leave Application","category":"Priviledged Leave","summary":""},
-    {"type" : "Perfomance Appraisal","category":"NA","summary":""},
-    {"type" : "Reimbursement Form","category":"NA","summary":""},
-    {"type" : "Asset Request Form","category":"NA","summary":""},
+    {"type" : "Leave Application"},
+    {"type" : "Perfomance Appraisal"},
+    {"type" : "Reimbursement Form"},
+    {"type" : "Asset Request Form"},
 ];
 
 function ApplicationMangement() {
@@ -31,12 +29,6 @@ function ApplicationMangement() {
     useEffect(() => {
         var user =  JSON.parse(localStorage.getItem('userDetails'));
       },[1]);
-
-
-
-   
-
-
 
   return (
     <div className="w-full App p-4 h-screen">
@@ -91,7 +83,7 @@ function ApplicationMangement() {
                         {type}
                         </Typography>
                     </td>
-                    <td className={classes}>
+                    {/* <td className={classes}>
                         <Typography
                         variant="small"
                         color="blue-gray"
@@ -99,8 +91,8 @@ function ApplicationMangement() {
                         >
                         {category}
                         </Typography>
-                    </td>
-                    <td className={classes}>
+                    </td> */}
+                    {/* <td className={classes}>
                         <Typography
                         variant="small"
                         color="blue-gray"
@@ -108,7 +100,7 @@ function ApplicationMangement() {
                         >
                         {summary}
                         </Typography>
-                    </td>
+                    </td> */}
                     <td className={classes}>
                         <Typography
                         variant="small"

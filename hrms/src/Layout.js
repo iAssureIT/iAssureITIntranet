@@ -20,6 +20,7 @@ import AcademicDetails from './pages/OnBoardingForm/AcademicDetails';
 import PendingRequest from './pages/ApplicationManagement/PendingRequest';
 import WorkExperience from './pages/OnBoardingForm/WorkExperience';
 import SkillsAndCert from './pages/OnBoardingForm/SkillsAndCert';
+import PendingRequestView from './pages/ApplicationManagement/PendingRequestView';
 const Layout = ({ children }) => {
     console.log("children",children);
     const [open,setOpen]=useState(false);
@@ -67,6 +68,7 @@ const Layout = ({ children }) => {
                             <Route path="/masters" element={<Masters />} exact />
                             <Route path="/orgchart" element={<EmployeeChart />} exact />
                             <Route path="/pendingrequest" element={<PendingRequest />} exact />
+                            <Route path="/pendingrequestview" element={<PendingRequestView />} exact />
                         </Routes>
                     </div>
                 </div>

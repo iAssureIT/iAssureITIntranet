@@ -2,13 +2,18 @@ const mongoose          = require("mongoose");
 const LeaveApplication  = require('./Model.js');
 
 exports.insertApplication = (req,res,next)=>{
-    const {manager_id,leaveType,leaveSubject,leaveSummary}= req.body
+    const {manager_id,leaveType,leaveSubject,leaveSummary,manager_name,user_id,user_name,fromDate,toDate}= req.body
     const leaveApplication = new LeaveApplication({
         _id                       : new mongoose.Types.ObjectId(),
         manager_id                : manager_id,
+		manager_name              : manager_name,
+		user_id                   : user_id,
+		user_name                 : user_name,
         leaveType                 : leaveType,
         leaveSubject              : leaveSubject,
         leaveSummary              : leaveSummary,
+		fromDate                  : fromDate,
+		toDate                   : toDate,
         createdAt                 : new Date(),
         status                    : 'Pending',
     })
@@ -50,10 +55,11 @@ exports.getLeaveRequest = (req, res) => {
 exports.updateStatus = (req, res) => {
 	// console.log("req.body => ",req.body);
 	LeaveApplication.updateOne(
-		{ _id: req.params.manager_id },
+		{ _id: req.body.leave_id },
 		{
 			$set: {				
 				status:req.body.status,
+				remark : req.body.remark
 			}
 		},
 	)
@@ -71,3 +77,13 @@ exports.updateStatus = (req, res) => {
 			res.status(500).json({ message: "Error occured while updating Status" });
 		})
 };
+
+exports.getInfo =(req,res)=>{
+	LeaveApplication.findOne({ _id: req.params.leave_id })
+		.then( leave=> {
+			res.status(200).json(leave)
+		})
+		.catch(error => {
+			res.status(500).json({ message: "Error occured while updating Status" });
+		})
+}

@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Datepicker from "react-tailwindcss-datepicker"; 
 
 function LeaveApplication(props) {
     console.log("props",props);
@@ -16,6 +17,10 @@ function LeaveApplication(props) {
     const [designationList,setDesignationList] = useState([]);
     const [policy_summary,setPolicySummary] = useState('');
     const [managerList,setManagerList] = useState([]);
+    const [value, setValue] = useState({ 
+        startDate: new Date(), 
+        endDate: new Date().setMonth(11) 
+        }); 
     const {
         register,
         handleSubmit,
@@ -39,7 +44,8 @@ function LeaveApplication(props) {
                 let userData ={
                     _id  : res.data.data[index]._id,                
                     name : res.data.data[index]?.profile?.fullName,
-                    username : res.data.data[index]?.username
+                    username : res.data.data[index]?.username,
+
                 } 
                 userList.push(userData);
             }
@@ -58,7 +64,9 @@ function LeaveApplication(props) {
             // toEmail: 'rushi.salunkhe101@gmail.com',
             subject: data.leave_subject,
             text: data.leave_type,
-            mail:policy_summary
+            mail:policy_summary,
+
+
           };
           console.log("notification", formValues1);
         //   axios
@@ -67,10 +75,15 @@ function LeaveApplication(props) {
         //       console.log("res 117", res);
         //       if (res.status === 200) {
                 const formValues = {
+                    manager_name: data.reporting_manager.split(' ')[0],
                     manager_id: data.reporting_manager.split(' ')[1],
                     leaveSubject: data.leave_subject,
                     leaveType: data.leave_type,
-                    leaveSummary:policy_summary
+                    leaveSummary:policy_summary,
+                    user_id : user.user_id,
+                    user_name : user.firstName+" "+user.lastName,
+                    fromDate: new Date(value.startDate),
+                    toDate : new Date(value.endDate)
                   };
                   console.log("formValues",formValues);
                     axios.post('/api/leaveApplication/post',formValues)
@@ -93,6 +106,13 @@ function LeaveApplication(props) {
     }   
 
     console.log("managerList",managerList);
+
+  
+        
+        const handleValueChange = (newValue) => {
+        console.log("newValue:", newValue); 
+        setValue(newValue); 
+        } 
 
     return (
     <div className="w-full  ">
@@ -132,6 +152,13 @@ function LeaveApplication(props) {
                                     <option value="Payroll policy">Paternity Leave</option>
                             </select>
                         </div> 
+
+                        <Datepicker 
+                            value={value} 
+                            onChange={handleValueChange} 
+                            useRange={false}
+                            minDate={new Date()} 
+                        /> 
 
                         <CKEditor
                                 editor={ ClassicEditor }
